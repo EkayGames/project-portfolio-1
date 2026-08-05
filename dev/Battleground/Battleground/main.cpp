@@ -1,12 +1,14 @@
 #include <iostream>
 #include "Helper.h"
+#include "GameMap.h"
 
-void SettingsMenu();
+void SettingsMenu(GameMap& map);
 
 int main()
 {
     bool run = true;
     int menuChoice = 0;
+    GameMap map;
     while (run)
     {
         std::cout << "1. Begin Game\n2. Settings\n3. Exit\n\nEnter Menu Option: ";
@@ -15,9 +17,12 @@ int main()
         switch (menuChoice)
         {
         case 1:
+            Helper::ClearConsoleWindow();
+            map.GenerateMap();
+            map.PrintMap();
             break;
         case 2:
-            SettingsMenu();
+            SettingsMenu(map);
             break;
         case 3:
             run = false;
@@ -26,7 +31,7 @@ int main()
     }
 }
 
-void SettingsMenu()
+void SettingsMenu(GameMap& map)
 {
     bool run = true;
     int menuChoice = 0;
@@ -41,10 +46,10 @@ void SettingsMenu()
         switch (menuChoice)
         {
         case 1: //Prompt user to change map width and height then store values.
-            std::cout << "Enter map width: ";
-            Helper::GetMenuChoice(1, 3);
-            std::cout << "Enter map height: ";
-            Helper::GetMenuChoice(1, 3);
+            std::cout << "Enter map width (max 10): ";
+            map.X(Helper::GetMenuChoice(1, 10));
+            std::cout << "Enter map height (max 10): ";
+            map.Y(Helper::GetMenuChoice(1, 10));
 
             Helper::ClearConsoleWindow();
             std::cout << "Map size changed.\n\n";
@@ -52,7 +57,7 @@ void SettingsMenu()
             break;
         case 2: //Prompt user to change amount of enemies
             std::cout << "Enter number of enemies: ";
-            Helper::GetMenuChoice(1, 3);
+            map.EnemyCount(Helper::GetMenuChoice(1, 3));
 
             Helper::ClearConsoleWindow();
             std::cout << "Enemy count changed.\n\n";
