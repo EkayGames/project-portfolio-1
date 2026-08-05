@@ -96,7 +96,7 @@ namespace Helper
 		while (true)
 		{
 			std::cin >> userInput;
-			ClearInputBuffer();
+			//ClearInputBuffer();
 
 			if (userInput >= min && userInput <= max)
 			{

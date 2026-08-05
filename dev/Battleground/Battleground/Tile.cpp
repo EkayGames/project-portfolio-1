@@ -13,6 +13,14 @@ void Tile::Print() const
     {
         std::cout << "|   |";
     }
+    else if (_entityType == "Player")
+    {
+        std::cout << "| P |";
+    }
+    else if (_entityType == "Enemy")
+    {
+        std::cout << "| E |";
+    }
 }
 
 
@@ -36,7 +44,7 @@ void Tile::Pos(int x, int y)
     _pos._ypos = y;
 }
 
-void Tile::EntityType(std::string& type)
+void Tile::EntityType(std::string type)
 {
     _entityType = type;
 }

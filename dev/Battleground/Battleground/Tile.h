@@ -23,7 +23,7 @@ public:
 
 	//setters
 	void Pos(int x, int y);
-	void EntityType(std::string& type);
+	void EntityType(std::string type);
 
 private:
 	Position _pos;

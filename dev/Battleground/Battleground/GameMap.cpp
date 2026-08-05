@@ -1,4 +1,5 @@
 #include "GameMap.h"
+#include "Helper.h"
 #include <iostream>
 
 
@@ -11,6 +12,7 @@ void GameMap::GenerateMap()
 {
 	_tiles.clear();
 
+	//Add tiles
 	for (int i = 0; i < _mapY; i++)
 	{
 		for (int j = 0; j < _mapX; j++)
@@ -18,6 +20,16 @@ void GameMap::GenerateMap()
 			Tile* tile = new Tile(j, i, "Empty");
 			_tiles.push_back(tile);
 		}
+	}
+
+	std::vector<int> usedTiles; //Keeps track of used tiles so enemies and players dont overlap
+	GeneratePlayer(usedTiles);
+
+	for (int i = 0; i < _numEnemies; i++)
+	{
+		int newEnemy = GenerateEnemy(usedTiles);
+		usedTiles.push_back(newEnemy);
+		_tiles[newEnemy]->EntityType("Enemy");
 	}
 }
 
@@ -28,12 +40,12 @@ void GameMap::PrintMap() const
 
 	for (int i = 0; i < _mapY; i++)
 	{
-		for (int j = 0; j < _mapX; j++)
+		for (int j = 0; j < _mapX; j++) //Print a line of correct length
 		{
 			std::cout << "=====";
 		}
 		std::cout << "\n";
-		for (int j = 0; j < _mapX; j++)
+		for (int j = 0; j < _mapX; j++) //Add center of tiles to row
 		{
 			_tiles[tile]->Print();
 			tile++;
@@ -41,10 +53,33 @@ void GameMap::PrintMap() const
 		std::cout << "\n";
 	}
 
-	for (int j = 0; j < _mapX; j++)
+	for (int j = 0; j < _mapX; j++) //Print a end line of correct length
 	{
 		std::cout << "=====";
 	}
+}
+
+//Generate and add a player to the map
+void GameMap::GeneratePlayer(std::vector<int>& usedTiles)
+{
+	int playerTile = Helper::RandomNumberGenerator(0, _tiles.size() - 1);
+	_tiles[playerTile]->EntityType("Player");
+	usedTiles.push_back(playerTile);
+}
+
+//Generate an enemy ID to assign to a tile. ID is random between number of tiles and cannot be used tile
+int GameMap::GenerateEnemy(std::vector<int>& usedTiles)
+{
+	int enemyTile = Helper::RandomNumberGenerator(0, _tiles.size() - 1);
+	for (auto i : usedTiles)
+	{
+		if (enemyTile == i)
+		{
+			enemyTile = GenerateEnemy(usedTiles); //if enemy is on occupied tile rerun
+		}
+	}
+
+	return enemyTile;
 }
 
 

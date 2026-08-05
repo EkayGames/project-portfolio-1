@@ -6,6 +6,7 @@ void SettingsMenu(GameMap& map);
 
 int main()
 {
+    srand(time(NULL));
     bool run = true;
     int menuChoice = 0;
     GameMap map;
