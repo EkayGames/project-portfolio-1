@@ -99,27 +99,46 @@ void Menus::MapMenu(GameMap& map)
     while (run)
     {
         std::cout << "Input W A S or D to move up left down or right.\n";
-        std::getline(std::cin, userInput);
-        const char* charInput = userInput.c_str();
-        switch (*charInput)
+
+        bool doInput = true;
+        while (doInput)
         {
-        case 'w':
-        case 'W':
+            std::getline(std::cin, userInput);
+            const char* charInput = userInput.c_str();
+            switch (*charInput)
+            {
+            case 'w':
+            case 'W':
+                map.MapPlayer()->Pos()._ypos--;
+                doInput = false;
 
-            break;
-        case 'a':
-        case 'A':
+                break;
+            case 'a':
+            case 'A':
+                map.MapPlayer()->Pos()._xpos--;
+                doInput = false;
 
-            break;
-        case 's':
-        case 'S':
+                break;
+            case 's':
+            case 'S':
+                map.MapPlayer()->Pos()._ypos++;
+                doInput = false;
 
-            break;
+                break;
 
-        case 'd':
-        case 'D':
+            case 'd':
+            case 'D':
+                map.MapPlayer()->Pos()._xpos++;
+                doInput = false;
 
-            break;
+                break;
+            default:
+                std::cout << "Invalid input, Try again: ";
+            }
         }
+
+        Helper::ClearConsoleWindow();
+        map.PrintMap();
+
     }
 }

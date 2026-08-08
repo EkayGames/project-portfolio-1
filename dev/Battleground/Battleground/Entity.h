@@ -5,11 +5,15 @@ class Entity
 {
 public:
 
+	Entity(int health, int attack, int x, int y);
+	~Entity();
+	Entity(const Entity& other);
+	Entity& operator=(const Entity& other);
 
 	//Getters
 	int Health() const;
 	int Attack() const;
-	Position Pos() const;
+	Position& Pos();
 
 	//setters
 	void Health(int health);
