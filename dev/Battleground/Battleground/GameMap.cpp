@@ -25,7 +25,7 @@ void GameMap::GenerateMap()
 	std::vector<int> usedTiles; //Keeps track of used tiles so enemies and players dont overlap
 	GeneratePlayer(usedTiles);
 
-	for (int i = 0; i < _numEnemies; i++)
+	for (int i = 0; i < _numEnemies; i++) //generate new enemy for each _numEnemies
 	{
 		int newEnemy = GenerateEnemy(usedTiles);
 		usedTiles.push_back(newEnemy);
@@ -57,6 +57,8 @@ void GameMap::PrintMap() const
 	{
 		std::cout << "=====";
 	}
+
+	std::cout << "\n\n";
 }
 
 //Generate and add a player to the map

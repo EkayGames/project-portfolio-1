@@ -2,6 +2,7 @@
 #include <cctype>
 #include <iostream>
 #include <limits>
+#include <string>
 
 namespace Helper
 {
@@ -76,11 +77,11 @@ namespace Helper
 	}
 
 	//ClearInputBuffer
-	static void ClearInputBuffer()
+	/*static void ClearInputBuffer()
 	{
 		std::cin.clear();
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-	}
+	}*/
 
 	//Clear console
 	static void ClearConsoleWindow()
@@ -91,21 +92,27 @@ namespace Helper
 	//Get menu choice
 	static unsigned int GetMenuChoice(unsigned int min, unsigned int max)
 	{
-		unsigned int userInput;
+		std::string userInput;
+		unsigned int inputInt;
 
 		while (true)
 		{
-			std::cin >> userInput;
-			//ClearInputBuffer();
+			std::getline(std::cin, userInput);
 
-			if (userInput >= min && userInput <= max)
+			try
 			{
-				return userInput;
+				inputInt = std::stoul(userInput);
 			}
-			else
+			catch (...)
 			{
-				std::cout << "Invalid input. Enter again: ";
+				std::cout << "Invalid input, try again: ";
 			}
+
+			if (inputInt <= max && inputInt >= min)
+			{
+				return inputInt;
+			}
+			else std::cout << "Invalid input, try again: ";
 		}
 
 	}

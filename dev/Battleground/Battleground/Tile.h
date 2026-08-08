@@ -15,7 +15,6 @@ public:
 
 	void Print() const;
 
-
 	//Getters
 	Position Pos() const;
 	std::string EntityType() const;

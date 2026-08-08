@@ -7,6 +7,7 @@
 //|   |
 //=====
 
+//Print the correct center depending on the entity type
 void Tile::Print() const
 {
     if (_entityType == "Empty")
@@ -22,6 +23,7 @@ void Tile::Print() const
         std::cout << "| E |";
     }
 }
+
 
 
 // Getters
