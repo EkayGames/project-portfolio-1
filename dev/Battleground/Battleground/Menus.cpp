@@ -13,7 +13,7 @@
 
 
 
-void Menus::MainMenu(GameMap& map)
+void Menus::MainMenu(GameMap* map)
 {
     bool run = true;
     int menuChoice = 0;
@@ -38,7 +38,15 @@ void Menus::MainMenu(GameMap& map)
         {
         case 1: //Start game
             Helper::ClearConsoleWindow();
-            MapMenu(map);
+
+            if (map->EnemyCount() < (map->X() * map->Y()) - 1)
+            {
+                MapMenu(map);
+            }
+            else
+            {
+                std::cout << "Error. Enemy count larger than free tile amount.";
+            }
             break;
         case 2: //Settings menu
             SettingsMenu(map);
@@ -50,7 +58,7 @@ void Menus::MainMenu(GameMap& map)
     }
 }
 
-void Menus::SettingsMenu(GameMap& map)
+void Menus::SettingsMenu(GameMap* map)
 {
     bool run = true;
     int menuChoice = 0;
@@ -65,18 +73,18 @@ void Menus::SettingsMenu(GameMap& map)
         switch (menuChoice)
         {
         case 1: //Prompt user to change map width and height then store values.
-            std::cout << "Enter map width (max 10): ";
-            map.X(Helper::GetMenuChoice(1, 10));
-            std::cout << "Enter map height (max 10): ";
-            map.Y(Helper::GetMenuChoice(1, 10));
+            std::cout << "Enter map width (min 2, max 10): ";
+            map->X(Helper::GetMenuChoice(2, 10));
+            std::cout << "Enter map height (min 2, max 10): ";
+            map->Y(Helper::GetMenuChoice(2, 10));
 
             Helper::ClearConsoleWindow();
             std::cout << "Map size changed.\n\n";
 
             break;
         case 2: //Prompt user to change amount of enemies
-            std::cout << "Enter number of enemies: ";
-            map.EnemyCount(Helper::GetMenuChoice(1, 3));
+            std::cout << "Enter number of enemies (Max: " << (map->X() * map->Y()) - 1 << "): ";
+            map->EnemyCount(Helper::GetMenuChoice(1, (map->X() * map->Y()) - 1));
 
             Helper::ClearConsoleWindow();
             std::cout << "Enemy count changed.\n\n";
@@ -89,11 +97,11 @@ void Menus::SettingsMenu(GameMap& map)
     }
 }
 
-void Menus::MapMenu(GameMap& map)
+void Menus::MapMenu(GameMap* map)
 {
     bool run = true;
-    map.GenerateMap();
-    map.PrintMap();
+    map->GenerateMap();
+    map->PrintMap();
     std::string userInput;
 
     while (run)
@@ -109,26 +117,26 @@ void Menus::MapMenu(GameMap& map)
             {
             case 'w':
             case 'W':
-                map.MapPlayer()->Pos()._ypos--;
+                map->MapPlayer()->Pos()._ypos--;
                 doInput = false;
 
                 break;
             case 'a':
             case 'A':
-                map.MapPlayer()->Pos()._xpos--;
+                map->MapPlayer()->Pos()._xpos--;
                 doInput = false;
 
                 break;
             case 's':
             case 'S':
-                map.MapPlayer()->Pos()._ypos++;
+                map->MapPlayer()->Pos()._ypos++;
                 doInput = false;
 
                 break;
 
             case 'd':
             case 'D':
-                map.MapPlayer()->Pos()._xpos++;
+                map->MapPlayer()->Pos()._xpos++;
                 doInput = false;
 
                 break;
@@ -138,7 +146,7 @@ void Menus::MapMenu(GameMap& map)
         }
 
         Helper::ClearConsoleWindow();
-        map.PrintMap();
+        map->PrintMap();
 
     }
 }

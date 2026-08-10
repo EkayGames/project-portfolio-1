@@ -5,9 +5,11 @@
 
 int main()
 {
+    Helper::MemoryLeakDetector(-1);
+
     srand(time(NULL));
-    bool run = true;
-    GameMap map;
+
+    GameMap* map = new GameMap;
 
     Menus::MainMenu(map);
 }
