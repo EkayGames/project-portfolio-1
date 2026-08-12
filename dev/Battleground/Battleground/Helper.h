@@ -102,17 +102,19 @@ namespace Helper
 			try
 			{
 				inputInt = std::stoul(userInput);
+
+				if (inputInt <= max && inputInt >= min)
+				{
+					return inputInt;
+				}
+				else std::cout << "Invalid input, try again: ";
 			}
 			catch (...)
 			{
 				std::cout << "Invalid input, try again: ";
 			}
 
-			if (inputInt <= max && inputInt >= min)
-			{
-				return inputInt;
-			}
-			else std::cout << "Invalid input, try again: ";
+
 		}
 
 	}

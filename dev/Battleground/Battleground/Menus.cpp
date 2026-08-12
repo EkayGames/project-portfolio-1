@@ -1,5 +1,4 @@
 #include "Menus.h"
-#include "Helper.h"
 
 // ____              __    __    ___                                                   __            
 ///\  _`\           /\ \__/\ \__/\_ \                                                 /\ \           
@@ -144,13 +143,15 @@ void Menus::MapMenu(GameMap* map)
                 std::cout << "Invalid input, Try again: ";
             }
 
-            for (auto i : map->Enemies())
+            for (int i = 0; i < map->Enemies().size(); i++)
             {
-                if (i->Pos()._xpos == map->MapPlayer()->Pos()._xpos &&
-                    i->Pos()._ypos == map->MapPlayer()->Pos()._ypos)
+                if (map->Enemies()[i]->Pos()._xpos == map->MapPlayer()->Pos()._xpos &&
+                    map->Enemies()[i]->Pos()._ypos == map->MapPlayer()->Pos()._ypos)
                 {
                     Helper::ClearConsoleWindow();
                     CombatMenu(map, i);
+                    map->Enemies().erase(map->Enemies().begin() + i);
+                    
                 }
             }
         }
@@ -158,15 +159,20 @@ void Menus::MapMenu(GameMap* map)
 
 
         Helper::ClearConsoleWindow();
+        if (map->MapPlayer()->Health() <= 0)
+        {
+            map->GameReset();
+            return;
+        }
         map->PrintMap();
 
     }
 }
 
-void Menus::CombatMenu(GameMap* map, Enemy* enemy)
+void Menus::CombatMenu(GameMap* map, int enemy)
 {
     std::string enemyName;
-    switch (enemy->GetEnemyType())
+    switch (map->Enemies()[enemy]->GetEnemyType())
     {
     case EnemyType::WizardShroom:
         enemyName = "Wizard Shroom";
@@ -179,11 +185,52 @@ void Menus::CombatMenu(GameMap* map, Enemy* enemy)
         break;
     }
     bool doCombat = true;
+    int combatChoice = 0;
+    int enemyCombatChoice = 0;
     while (doCombat)
     {
-        enemy->PrintEnemy();
+        map->Enemies()[enemy]->PrintEnemy();
         std::cout << "\n\n=======================================================\nA " << enemyName << " appears!\n\n";
-        std::cout << "1. Lunge\t\t2. Defend\t\t3. Dash";
-        Helper::PauseConsoleWindow();
+        if (combatChoice != 0 && enemyCombatChoice != 0)
+        {
+            Combat::PrintBattleText(combatChoice, enemyCombatChoice, enemyName, map, enemy);
+        }
+        std::cout << "Enemy health: " << map->Enemies()[enemy]->Health() << "\n";
+        std::cout << "Your health: " << map->MapPlayer()->Health() << "\n\n";
+        std::cout << "1. Lunge\t\t2. Defend\t\t3. Dash\n\nEnter action choice(1 2 or 3): ";
+
+        combatChoice = Helper::GetMenuChoice(1, 3);
+        enemyCombatChoice = Helper::RandomNumberGenerator(1, 3);
+
+        Combat::CalculateDamage(combatChoice, enemyCombatChoice, map, enemy);
+        if (map->Enemies()[enemy]->Health() <= 0)
+        {
+            CombatWinScreen();
+            doCombat = false;
+        }
+        else if (map->MapPlayer()->Health() <= 0)
+        {
+            LoseScreen();
+            doCombat = false;
+        }
+
+        Helper::ClearConsoleWindow();
+
+
     }
 }
+
+void Menus::LoseScreen()
+{
+    Helper::ClearConsoleWindow();
+    std::cout << "YOU LOSE\n\nPress enter to return to main menu...";
+    Helper::PauseConsoleWindow();
+}
+
+void Menus::CombatWinScreen()
+{
+    Helper::ClearConsoleWindow();
+    std::cout << "YOU WIN!\n\nPress enter to return to map...";
+    Helper::PauseConsoleWindow();
+}
+

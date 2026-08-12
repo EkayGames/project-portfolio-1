@@ -139,6 +139,12 @@ void GameMap::UpdateMap()
 	}
 }
 
+void GameMap::GameReset()
+{
+	_player->Health(10);
+	_enemies.clear();
+}
+
 
 //Getters
 
@@ -162,7 +168,7 @@ Player* GameMap::MapPlayer() const
 	return _player;
 }
 
-std::vector<Enemy*> GameMap::Enemies() const
+std::vector<Enemy*>& GameMap::Enemies()
 {
 	return _enemies;
 }

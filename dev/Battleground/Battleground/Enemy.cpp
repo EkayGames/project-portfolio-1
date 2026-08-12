@@ -96,7 +96,7 @@ void Enemy::PrintEnemy()
         break;
     }
 }
-
+//Getter for enemy type
 EnemyType Enemy::GetEnemyType() const
 {
     return _enemyType;
