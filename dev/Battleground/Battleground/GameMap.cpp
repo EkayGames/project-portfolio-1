@@ -71,7 +71,7 @@ void GameMap::GeneratePlayer(std::vector<int>& usedTiles)
 	_player = new Player(10, 5, _tiles[playerTile]->Pos());
 }
 
-//Generate an enemy ID to assign to a tile. ID is random between number of tiles and cannot be used tile
+//Generate an enemy with ID to assign to a tile. ID is random between number of tiles and cannot be used tile
 int GameMap::GenerateEnemy(std::vector<int>& usedTiles)
 {
 	int enemyTile = Helper::RandomNumberGenerator(0, _tiles.size() - 1);
@@ -83,8 +83,34 @@ int GameMap::GenerateEnemy(std::vector<int>& usedTiles)
 		}
 	}
 
-	Enemy* newEnemy = new Enemy(5, 3, _tiles[enemyTile]->Pos());
-	_enemies.push_back(newEnemy);
+	EnemyType randType = static_cast<EnemyType>(Helper::RandomNumberGenerator(
+		static_cast<int>(EnemyType::WizardShroom), 
+		static_cast<int>(EnemyType::LAST) - 1));
+
+	int attack;
+	int health;
+
+	switch (randType)
+	{
+	case EnemyType::WizardShroom:
+		attack = 5;
+		health = 5;
+		break;
+	case EnemyType::Skeleton:
+		attack = 3;
+		health = 10;
+		break;
+	case EnemyType::Hippie:
+		attack = 1;
+		health = 25;
+		break;
+	}
+
+		Enemy* newEnemy = new Enemy(health, attack, _tiles[enemyTile]->Pos(), randType);
+		_enemies.push_back(newEnemy);
+
+
+
 
 	return enemyTile;
 }

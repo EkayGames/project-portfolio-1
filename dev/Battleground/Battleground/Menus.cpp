@@ -143,10 +143,47 @@ void Menus::MapMenu(GameMap* map)
             default:
                 std::cout << "Invalid input, Try again: ";
             }
+
+            for (auto i : map->Enemies())
+            {
+                if (i->Pos()._xpos == map->MapPlayer()->Pos()._xpos &&
+                    i->Pos()._ypos == map->MapPlayer()->Pos()._ypos)
+                {
+                    Helper::ClearConsoleWindow();
+                    CombatMenu(map, i);
+                }
+            }
         }
+
+
 
         Helper::ClearConsoleWindow();
         map->PrintMap();
 
+    }
+}
+
+void Menus::CombatMenu(GameMap* map, Enemy* enemy)
+{
+    std::string enemyName;
+    switch (enemy->GetEnemyType())
+    {
+    case EnemyType::WizardShroom:
+        enemyName = "Wizard Shroom";
+        break;
+    case EnemyType::Skeleton:
+        enemyName = "Skeleton";
+        break;
+    case EnemyType::Hippie:
+        enemyName = "Hippie";
+        break;
+    }
+    bool doCombat = true;
+    while (doCombat)
+    {
+        enemy->PrintEnemy();
+        std::cout << "\n\n=======================================================\nA " << enemyName << " appears!\n\n";
+        std::cout << "1. Lunge\t\t2. Defend\t\t3. Dash";
+        Helper::PauseConsoleWindow();
     }
 }
