@@ -111,37 +111,61 @@ void Menus::MapMenu(GameMap* map)
         while (doInput)
         {
             std::getline(std::cin, userInput);
-            const char* charInput = userInput.c_str();
-            switch (*charInput)
+
+            if (userInput.size() != 1)
             {
-            case 'w':
-            case 'W':
-                map->MapPlayer()->Pos()._ypos--;
-                doInput = false;
-
-                break;
-            case 'a':
-            case 'A':
-                map->MapPlayer()->Pos()._xpos--;
-                doInput = false;
-
-                break;
-            case 's':
-            case 'S':
-                map->MapPlayer()->Pos()._ypos++;
-                doInput = false;
-
-                break;
-
-            case 'd':
-            case 'D':
-                map->MapPlayer()->Pos()._xpos++;
-                doInput = false;
-
-                break;
-            default:
                 std::cout << "Invalid input, Try again: ";
             }
+            else
+            {
+                switch (userInput[0])
+                {
+                case 'w':
+                case 'W':
+
+                    if (map->MapPlayer()->Pos()._ypos > 0)
+                    {
+                        map->MapPlayer()->Pos()._ypos--;
+                    }
+                    doInput = false;
+
+                    break;
+                case 'a':
+                case 'A':
+
+                    if (map->MapPlayer()->Pos()._xpos > 0)
+                    {
+                        map->MapPlayer()->Pos()._xpos--;
+                    }
+                    doInput = false;
+
+                    break;
+                case 's':
+                case 'S':
+                    if (map->MapPlayer()->Pos()._ypos < map->Y() - 1)
+                    {
+                        map->MapPlayer()->Pos()._ypos++;
+                    }
+
+                    doInput = false;
+
+                    break;
+
+                case 'd':
+                case 'D':
+                    if (map->MapPlayer()->Pos()._xpos < map->X() - 1)
+                    {
+                        map->MapPlayer()->Pos()._xpos++;
+                    }
+
+                    doInput = false;
+
+                    break;
+                default:
+                    std::cout << "Invalid input, Try again: ";
+                }
+            }
+            
             //Check if player and enemy are on same tile and if so initiate combat
             for (int i = 0; i < map->Enemies().size(); i++)
             {
