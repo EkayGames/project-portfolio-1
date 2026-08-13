@@ -17,7 +17,7 @@ void Combat::PrintBattleText(int userChoice, int enemyChoice, std::string enemyN
     }
     else if (userChoice == 2 && enemyChoice == 1)
     {
-        std::cout << enemyName << " broke your guard, dealing" << map->Enemies()[enemy]->Attack() << " damage!";
+        std::cout << enemyName << " broke your guard, dealing " << map->Enemies()[enemy]->Attack() << " damage!";
     }
     else if (userChoice == 2 && enemyChoice == 2)
     {

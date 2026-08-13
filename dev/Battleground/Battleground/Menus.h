@@ -11,6 +11,7 @@ public:
 	static void CombatMenu(GameMap* map, int enemy);
 	static void LoseScreen();
 	static void CombatWinScreen();
+	static void NextFloorScreen();
 
 private:
 	

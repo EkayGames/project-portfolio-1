@@ -142,7 +142,7 @@ void Menus::MapMenu(GameMap* map)
             default:
                 std::cout << "Invalid input, Try again: ";
             }
-
+            //Check if player and enemy are on same tile and if so initiate combat
             for (int i = 0; i < map->Enemies().size(); i++)
             {
                 if (map->Enemies()[i]->Pos()._xpos == map->MapPlayer()->Pos()._xpos &&
@@ -164,6 +164,13 @@ void Menus::MapMenu(GameMap* map)
             map->GameReset();
             return;
         }
+        
+        if (map->Enemies().size() == 0)
+        {
+            map->GenerateMap();
+            NextFloorScreen();
+        }
+        
         map->PrintMap();
 
     }
@@ -231,6 +238,13 @@ void Menus::CombatWinScreen()
 {
     Helper::ClearConsoleWindow();
     std::cout << "YOU WIN!\n\nPress enter to return to map...";
+    Helper::PauseConsoleWindow();
+}
+
+void Menus::NextFloorScreen()
+{
+    Helper::ClearConsoleWindow();
+    std::cout << "YOU BEAT ALL ENEMIES ON THE FLOOR!\n\nPress enter to enter the next floor...";
     Helper::PauseConsoleWindow();
 }
 
