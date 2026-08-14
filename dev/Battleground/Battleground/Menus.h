@@ -12,6 +12,7 @@ public:
 	static void LoseScreen();
 	static void CombatWinScreen();
 	static void NextFloorScreen();
+	static void HelpMenu();
 
 private:
 	

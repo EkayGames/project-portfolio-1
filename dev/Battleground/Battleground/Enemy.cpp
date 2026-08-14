@@ -36,6 +36,7 @@ Enemy& Enemy::operator=(const Enemy& other)
     return *this;
 }
 
+//Print correct enemy based on type
 void Enemy::PrintEnemy()
 {
     switch (_enemyType)

@@ -30,8 +30,8 @@ void Menus::MainMenu(GameMap* map)
                                                  \_/__/                                                                                                                                                      
 )";
         std::cout << "\033[0m";
-        std::cout << "1. Begin Game\n2. Settings\n3. Exit\n\nEnter Menu Option: ";
-        menuChoice = Helper::GetMenuChoice(1, 3);
+        std::cout << "1. Begin Game\n2. Settings\n3. Help\n4. Exit\n\nEnter Menu Option: ";
+        menuChoice = Helper::GetMenuChoice(1, 4);
 
         switch (menuChoice)
         {
@@ -50,7 +50,10 @@ void Menus::MainMenu(GameMap* map)
         case 2: //Settings menu
             SettingsMenu(map);
             break;
-        case 3: //Exit game
+        case 3:
+            HelpMenu();
+            break;
+        case 4: //Exit game
             run = false;
             break;
         }
@@ -112,6 +115,7 @@ void Menus::MapMenu(GameMap* map)
         {
             std::getline(std::cin, userInput);
 
+            //Get user input for direction
             if (userInput.size() != 1)
             {
                 std::cout << "Invalid input, Try again: ";
@@ -203,7 +207,7 @@ void Menus::MapMenu(GameMap* map)
 void Menus::CombatMenu(GameMap* map, int enemy)
 {
     std::string enemyName;
-    switch (map->Enemies()[enemy]->GetEnemyType())
+    switch (map->Enemies()[enemy]->GetEnemyType()) //Store enemy name for combat text
     {
     case EnemyType::WizardShroom:
         enemyName = "Wizard Shroom";
@@ -220,6 +224,7 @@ void Menus::CombatMenu(GameMap* map, int enemy)
     int enemyCombatChoice = 0;
     while (doCombat)
     {
+        //Print menu
         map->Enemies()[enemy]->PrintEnemy();
         std::cout << "\n\n=======================================================\nA " << enemyName << " appears!\n\n";
         if (combatChoice != 0 && enemyCombatChoice != 0)
@@ -230,10 +235,12 @@ void Menus::CombatMenu(GameMap* map, int enemy)
         std::cout << "Your health: " << map->MapPlayer()->Health() << "\n\n";
         std::cout << "1. Lunge\t\t2. Defend\t\t3. Dash\n\nEnter action choice(1 2 or 3): ";
 
+        //Get user input and calculate damage
         combatChoice = Helper::GetMenuChoice(1, 3);
         enemyCombatChoice = Helper::RandomNumberGenerator(1, 3);
-
         Combat::CalculateDamage(combatChoice, enemyCombatChoice, map, enemy);
+
+        //Win if enemy health is 0, lose if player health is 0
         if (map->Enemies()[enemy]->Health() <= 0)
         {
             CombatWinScreen();
@@ -270,5 +277,16 @@ void Menus::NextFloorScreen()
     Helper::ClearConsoleWindow();
     std::cout << "YOU BEAT ALL ENEMIES ON THE FLOOR!\n\nPress enter to enter the next floor...";
     Helper::PauseConsoleWindow();
+}
+
+void Menus::HelpMenu()
+{
+    Helper::ClearConsoleWindow();
+    std::cout << "Instructions\n===============\nDefeat all enemies on the map to move to the next one!\n";
+    std::cout << "Enter W A S D to move around the map and reach enemies!\n";
+    std::cout << "Lunge beats block, block beats dash, and dash beats lunge!\n\nPress any button to return to the main menu...";
+
+    Helper::PauseConsoleWindow();
+    Helper::ClearConsoleWindow();
 }
 
