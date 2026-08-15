@@ -37,7 +37,21 @@ For my next milestone I want to have basic combat done. I want a combat screen t
 
 ### Week 2
 
-My next stand up will go here...
+ Overview – What did you work on this past week?
+
+This week I worked on adding the combat system and refining user input. The basic combat is now fully finished and the game has a proper game loop, entering a new floor on beating all enemies or returning to the main menu if the player health reaches 0.
+
+ Challenges – What obstacles did you encounter, and how are you addressing them?
+
+This week went surprisingly smooth honestly but it was difficult keeping track of my menu system. Stuff like when each loop ends which will return to the previous menu. Writing stuff out in mspaint helped a lot haha.
+
+ Accomplishments – What is something you learned, improved, or "leveled up" on this week?
+
+I think I'm doing better with my understanding of pointers.
+
+ Next Steps – What do you plan to prioritize before Week 3?
+
+Going into week 3 my priorities are to plan out how I want to make the gameplay more interesting. I have plans for the player getting a powerup at the end of each floor and possibly adding different types of tiles like treasure tiles.
 
 ### Week 3
 
