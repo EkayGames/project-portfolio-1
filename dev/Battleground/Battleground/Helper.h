@@ -99,20 +99,27 @@ namespace Helper
 		{
 			std::getline(std::cin, userInput);
 
-			try
+			if (IsInteger(userInput.c_str()))
 			{
-				inputInt = std::stoul(userInput);
-			}
-			catch (...)
-			{
-				std::cout << "Invalid input, try again: ";
-			}
+				try
+				{
+					inputInt = std::stoul(userInput);
 
-			if (inputInt <= max && inputInt >= min)
-			{
-				return inputInt;
+					if (inputInt <= max && inputInt >= min)
+					{
+						return inputInt;
+					}
+					else std::cout << "Invalid input, try again: ";
+				}
+				catch (...)
+				{
+					std::cout << "Invalid input, try again: ";
+				}
 			}
 			else std::cout << "Invalid input, try again: ";
+
+
+
 		}
 
 	}

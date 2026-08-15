@@ -12,6 +12,7 @@ public:
 	void GeneratePlayer(std::vector<int>& usedTiles);
 	int GenerateEnemy(std::vector<int>& usedTiles);
 	void UpdateMap();
+	void GameReset();
 	
 	//Getters
 
@@ -19,7 +20,7 @@ public:
 	int Y() const;
 	int EnemyCount() const;
 	Player* MapPlayer() const;
-	std::vector<Enemy*> Enemies() const;
+	std::vector<Enemy*>& Enemies();
 
 
 	// Setters
