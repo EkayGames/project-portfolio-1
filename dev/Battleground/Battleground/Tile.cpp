@@ -10,17 +10,17 @@
 //Print the correct center depending on the entity type
 void Tile::Print() const
 {
-    if (_entityType == "Empty")
+    switch (_entityType)
     {
+    case EntityType::Empty:
         std::cout << "|   |";
-    }
-    else if (_entityType == "Player")
-    {
+        break;
+    case EntityType::Player:
         std::cout << "| P |";
-    }
-    else if (_entityType == "Enemy")
-    {
+        break;
+    case EntityType::Enemy:
         std::cout << "| E |";
+        break;
     }
 }
 
@@ -33,7 +33,7 @@ Position Tile::Pos() const
     return _pos;
 }
 
-std::string Tile::EntityType() const
+EntityType Tile::GetEntityType() const
 {
     return _entityType;
 }
@@ -46,7 +46,7 @@ void Tile::Pos(int x, int y)
     _pos._ypos = y;
 }
 
-void Tile::EntityType(std::string type)
+void Tile::SetEntityType(EntityType type)
 {
     _entityType = type;
 }

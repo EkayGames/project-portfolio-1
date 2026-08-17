@@ -17,7 +17,7 @@ void GameMap::GenerateMap()
 	{
 		for (int j = 0; j < _mapX; j++)
 		{
-			Tile* tile = new Tile(j, i, "Empty");
+			Tile* tile = new Tile(j, i, EntityType::Empty);
 			_tiles.push_back(tile);
 		}
 	}
@@ -29,7 +29,7 @@ void GameMap::GenerateMap()
 	{
 		int newEnemy = GenerateEnemy(usedTiles);
 		usedTiles.push_back(newEnemy);
-		_tiles[newEnemy]->EntityType("Enemy");
+		_tiles[newEnemy]->SetEntityType(EntityType::Enemy);
 	}
 }
 
@@ -65,7 +65,7 @@ void GameMap::PrintMap()
 void GameMap::GeneratePlayer(std::vector<int>& usedTiles)
 {
 	int playerTile = Helper::RandomNumberGenerator(0, _tiles.size() - 1);
-	_tiles[playerTile]->EntityType("Player");
+	_tiles[playerTile]->SetEntityType(EntityType::Player);
 	usedTiles.push_back(playerTile);
 
 	_player = new Player(10, 5, _tiles[playerTile]->Pos());
@@ -120,12 +120,12 @@ void GameMap::UpdateMap()
 {
 	for (auto i : _tiles)
 	{
-		i->EntityType("Empty");
+		i->SetEntityType(EntityType::Empty);
 
 		if (i->Pos()._xpos == _player->Pos()._xpos && //If Player pos matches tile pos, update entity type
 			i->Pos()._ypos == _player->Pos()._ypos)
 		{
-			i->EntityType("Player");
+			i->SetEntityType(EntityType::Player);
 		}
 		
 		for (auto j : _enemies) //Check each active enemy
@@ -133,7 +133,7 @@ void GameMap::UpdateMap()
 			if (i->Pos()._xpos == j->Pos()._xpos && //If Enemy pos matches tile pos, update entity type
 				i->Pos()._ypos == j->Pos()._ypos)
 			{
-				i->EntityType("Enemy");
+				i->SetEntityType(EntityType::Enemy);
 			}
 		}
 	}

@@ -127,7 +127,8 @@ namespace Helper
 	//Pause console 
 	static void PauseConsoleWindow()
 	{
-		std::cin.get();
+		std::string input;
+		std::getline(std::cin, input);
 	}
 
 	//Memory leak detection code PUT AT START OF MAIN
