@@ -196,7 +196,7 @@ void Menus::MapMenu(GameMap* map)
         if (map->Enemies().size() == 0)
         {
             map->GenerateMap();
-            NextFloorScreen();
+            PowerUpMenu();
         }
         
         map->PrintMap();
@@ -288,5 +288,58 @@ void Menus::HelpMenu()
 
     Helper::PauseConsoleWindow();
     Helper::ClearConsoleWindow();
+}
+
+void Menus::PowerUpMenu()
+{
+    bool dupe = false;
+    //Generate powerup option 1
+    Powerup* pow1 = new Powerup(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
+    //Generate powerup option 2
+    Powerup* pow2 = new Powerup(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
+    if (pow2->GetPower() == pow1->GetPower())
+    {
+        do
+        {
+            dupe = true;
+            pow2->SetPower(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
+
+            if (pow2->GetPower() != pow1->GetPower())
+            {
+                dupe = false;
+            }
+        } while (dupe);
+    }
+    //Generate powerup option 3
+    Powerup* pow3 = new Powerup(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
+    if (pow3->GetPower() == pow1->GetPower() ||
+        pow3->GetPower() == pow2->GetPower())
+    {
+        do
+        {
+            dupe = true;
+            pow3->SetPower(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
+
+            if (pow3->GetPower() != pow2->GetPower() &&
+                pow3->GetPower() != pow1->GetPower())
+            {
+                dupe = false;
+            }
+        } while (dupe);
+    }
+    //Print options
+    Helper::ClearConsoleWindow();
+    std::cout << "YOU BEAT ALL ENEMIES ON THE FLOOR!\nSELECT A POWERUP!\n\n";
+    std::cout << "1. ";
+    pow1->PrintPower();
+    std::cout << "2. ";
+    pow2->PrintPower();
+    std::cout << "3. ";
+    pow3->PrintPower();
+    //Get choice
+    std::cout << "\nInput Power Choice: ";
+    int powChoice = Helper::GetMenuChoice(1, 3);
+
+
 }
 

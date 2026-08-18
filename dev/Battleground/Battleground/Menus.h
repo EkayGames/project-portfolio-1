@@ -2,6 +2,7 @@
 #include "GameMap.h"
 #include "Combat.h"
 #include "Helper.h"
+#include "Powerup.h"
 class Menus
 {
 public:
@@ -13,6 +14,7 @@ public:
 	static void CombatWinScreen();
 	static void NextFloorScreen();
 	static void HelpMenu();
+	static void PowerUpMenu();
 
 private:
 	

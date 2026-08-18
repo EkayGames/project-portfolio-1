@@ -33,3 +33,36 @@ Player& Player::operator=(const Player& other)
 
     return *this;
 }
+
+//Increase player stats, or add powerup based on power input
+void Player::ApplyPower(Powerup pow)
+{
+    switch (pow.GetPower())
+    {
+    case Power::HealthUp:
+        _maxHealth = _maxHealth + 5;
+        break;
+    case Power::DamageUp:
+        this->Attack(this->Attack() + 1);
+        break;
+    case Power::LungeDamage:
+        _powers.push_back(Power::LungeDamage);
+        break;
+    case Power::BlockDamage:
+        _powers.push_back(Power::BlockDamage);
+        break;
+    case Power::DashDamage:
+        _powers.push_back(Power::DashDamage);
+        break;
+    }
+}
+
+void Player::MaxHealth(int max)
+{
+    _maxHealth = max;
+}
+
+int Player::MaxHealth() const
+{
+    return _maxHealth;
+}

@@ -1,5 +1,7 @@
 #pragma once
 #include "Entity.h"
+#include "Powerup.h"
+#include <vector>
 class Player :
     public Entity
 {
@@ -11,8 +13,14 @@ public:
     Player(const Player& other);
     Player& operator=(const Player& other);
 
+    void ApplyPower(Powerup pow);
+
+    void MaxHealth(int max);
+
+    int MaxHealth() const;
 
 private:
-
+    int _maxHealth = 10;
+    std::vector<Powerup> _powers;
 };
 
