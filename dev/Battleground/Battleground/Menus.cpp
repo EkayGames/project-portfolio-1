@@ -292,40 +292,20 @@ void Menus::HelpMenu()
 
 void Menus::PowerUpMenu(GameMap* map)
 {
-    bool dupe = false;
     //Generate powerup option 1
     Powerup* pow1 = new Powerup(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
     //Generate powerup option 2
     Powerup* pow2 = new Powerup(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
     if (pow2->GetPower() == pow1->GetPower())
     {
-        do
-        {
-            dupe = true;
-            pow2->SetPower(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
-
-            if (pow2->GetPower() != pow1->GetPower())
-            {
-                dupe = false;
-            }
-        } while (dupe);
+        pow2->RerollDuplicates(pow1);
     }
     //Generate powerup option 3
     Powerup* pow3 = new Powerup(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
     if (pow3->GetPower() == pow1->GetPower() ||
         pow3->GetPower() == pow2->GetPower())
     {
-        do
-        {
-            dupe = true;
-            pow3->SetPower(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
-
-            if (pow3->GetPower() != pow2->GetPower() &&
-                pow3->GetPower() != pow1->GetPower())
-            {
-                dupe = false;
-            }
-        } while (dupe);
+        pow3->RerollDuplicates(pow1, pow2);
     }
 
     map->MapPlayer()->Health(map->MapPlayer()->Health() + 5); //Heal 5 health

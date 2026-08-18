@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "Helper.h"
 enum class Power
 {
 	HealthUp = 1,
@@ -21,6 +22,8 @@ public:
 	Powerup& operator=(const Powerup& other);
 
 	void PrintPower();
+	void RerollDuplicates(Powerup* dupe);
+	void RerollDuplicates(Powerup* dupe, Powerup* dupe2);
 
 	Power GetPower() const;
 

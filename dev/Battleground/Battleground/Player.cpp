@@ -41,9 +41,14 @@ void Player::ApplyPower(Powerup pow)
     {
     case Power::HealthUp:
         _maxHealth = _maxHealth + 5;
+        Health(Health() + 5);
+        if (Health() > _maxHealth)
+        {
+            Health(_maxHealth);
+        }
         break;
     case Power::DamageUp:
-        this->Attack(this->Attack() + 1);
+        Attack(Attack() + 1);
         break;
     case Power::LungeDamage:
         _powers.push_back(Power::LungeDamage);
