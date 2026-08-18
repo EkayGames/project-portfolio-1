@@ -180,6 +180,7 @@ void Menus::MapMenu(GameMap* map)
                     CombatMenu(map, i);
                     map->Enemies().erase(map->Enemies().begin() + i);
                     
+                    break;
                 }
             }
         }

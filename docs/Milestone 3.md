@@ -13,5 +13,5 @@
 - tested if powerups roll no duplicates
 - tested if powerups apply changes to player object
 ## Challenges
-
+- Enemies were occasionally not being removed from the map upon beating them
 ## Next Steps
