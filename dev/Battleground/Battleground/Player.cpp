@@ -12,6 +12,11 @@ Player::Player(int health, int attack, Position pos) :
 
 }
 
+Player::Player(int health, int attack) :
+    Entity::Entity(health, attack)
+{
+}
+
 Player::~Player()
 {
 }
@@ -35,9 +40,9 @@ Player& Player::operator=(const Player& other)
 }
 
 //Increase player stats, or add powerup based on power input
-void Player::ApplyPower(Powerup pow)
+void Player::ApplyPower(Powerup* pow)
 {
-    switch (pow.GetPower())
+    switch (pow->GetPower())
     {
     case Power::HealthUp:
         _maxHealth = _maxHealth + 5;

@@ -65,7 +65,7 @@ void Powerup::RerollDuplicates(Powerup* dupe)
         {
             isDupe = false;
         }
-    } while (dupe);
+    } while (isDupe);
 }
 
 void Powerup::RerollDuplicates(Powerup* dupe, Powerup* dupe2)
@@ -80,7 +80,7 @@ void Powerup::RerollDuplicates(Powerup* dupe, Powerup* dupe2)
         {
             isDupe = false;
         }
-    } while (dupe);
+    } while (isDupe);
 }
 
 Power Powerup::GetPower() const

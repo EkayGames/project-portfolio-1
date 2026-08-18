@@ -9,11 +9,12 @@ public:
 
     Player(int health, int attack, int x, int y);
     Player(int health, int attack, Position pos);
+    Player(int health, int attack);
     ~Player();
     Player(const Player& other);
     Player& operator=(const Player& other);
 
-    void ApplyPower(Powerup pow);
+    void ApplyPower(Powerup* pow);
 
     void MaxHealth(int max);
 

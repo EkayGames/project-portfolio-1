@@ -9,7 +9,7 @@ class GameMap
 public:
 	void GenerateMap();
 	void PrintMap();
-	void GeneratePlayer(std::vector<int>& usedTiles);
+	void GeneratePlayerPos(std::vector<int>& usedTiles);
 	int GenerateEnemy(std::vector<int>& usedTiles);
 	void UpdateMap();
 	void GameReset();
@@ -27,6 +27,7 @@ public:
 
 	void X(int x);
 	void Y(int y);
+	void MapPlayer(Player* player);
 	void EnemyCount(int enemies);
 
 private:
@@ -34,7 +35,7 @@ private:
 	int _mapX = 5;
 	int _mapY = 5;
 	int _numEnemies = 3;
-	Player* _player;
+	Player* _player = nullptr;
 	std::vector<Enemy*> _enemies;
 };
 

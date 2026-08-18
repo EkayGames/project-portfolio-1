@@ -102,6 +102,7 @@ void Menus::SettingsMenu(GameMap* map)
 void Menus::MapMenu(GameMap* map)
 {
     bool run = true;
+    map->MapPlayer(new Player(10, 5));
     map->GenerateMap();
     map->PrintMap();
     std::string userInput;
@@ -327,6 +328,18 @@ void Menus::PowerUpMenu(GameMap* map)
     //Get choice
     std::cout << "\nInput Power Choice: ";
     int powChoice = Helper::GetMenuChoice(1, 3);
+    switch (powChoice)
+    {
+    case 1:
+        map->MapPlayer()->ApplyPower(pow1);
+        break;
+    case 2:
+        map->MapPlayer()->ApplyPower(pow2);
+        break;
+    case 3:
+        map->MapPlayer()->ApplyPower(pow3);
+        break;
+    }
 
     Helper::ClearConsoleWindow();
 }

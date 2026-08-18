@@ -6,6 +6,7 @@ class Entity
 public:
 
 	Entity(int health, int attack, int x, int y);
+	Entity(int health, int attack);
 	~Entity();
 	Entity(const Entity& other);
 	Entity& operator=(const Entity& other);

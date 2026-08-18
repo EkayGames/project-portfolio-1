@@ -23,7 +23,7 @@ void GameMap::GenerateMap()
 	}
 
 	std::vector<int> usedTiles; //Keeps track of used tiles so enemies and players dont overlap
-	GeneratePlayer(usedTiles);
+	GeneratePlayerPos(usedTiles);
 
 	for (int i = 0; i < _numEnemies; i++) //generate new enemy for each _numEnemies
 	{
@@ -62,13 +62,13 @@ void GameMap::PrintMap()
 }
 
 //Generate and add a player to the map
-void GameMap::GeneratePlayer(std::vector<int>& usedTiles)
+void GameMap::GeneratePlayerPos(std::vector<int>& usedTiles)
 {
 	int playerTile = Helper::RandomNumberGenerator(0, _tiles.size() - 1);
 	_tiles[playerTile]->SetEntityType(EntityType::Player);
 	usedTiles.push_back(playerTile);
 
-	_player = new Player(10, 5, _tiles[playerTile]->Pos());
+	_player->Pos(_tiles[playerTile]->Pos()._xpos, _tiles[playerTile]->Pos()._ypos);
 }
 
 //Generate an enemy with ID to assign to a tile. ID is random between number of tiles and cannot be used tile
@@ -183,6 +183,11 @@ void GameMap::X(int x)
 void GameMap::Y(int y)
 {
 	_mapY = y;
+}
+
+void GameMap::MapPlayer(Player* player)
+{
+	_player = player;
 }
 
 void GameMap::EnemyCount(int enemies)
