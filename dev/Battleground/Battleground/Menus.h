@@ -14,7 +14,7 @@ public:
 	static void CombatWinScreen();
 	static void NextFloorScreen();
 	static void HelpMenu();
-	static void PowerUpMenu();
+	static void PowerUpMenu(GameMap* map);
 
 private:
 	

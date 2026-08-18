@@ -196,7 +196,7 @@ void Menus::MapMenu(GameMap* map)
         if (map->Enemies().size() == 0)
         {
             map->GenerateMap();
-            PowerUpMenu();
+            PowerUpMenu(map);
         }
         
         map->PrintMap();
@@ -290,7 +290,7 @@ void Menus::HelpMenu()
     Helper::ClearConsoleWindow();
 }
 
-void Menus::PowerUpMenu()
+void Menus::PowerUpMenu(GameMap* map)
 {
     bool dupe = false;
     //Generate powerup option 1
@@ -327,9 +327,16 @@ void Menus::PowerUpMenu()
             }
         } while (dupe);
     }
+
+    map->MapPlayer()->Health(map->MapPlayer()->Health() + 5); //Heal 5 health
+    if (map->MapPlayer()->Health() > map->MapPlayer()->MaxHealth()) //If player health goes higher than max health, set health to max health
+    {
+        map->MapPlayer()->Health(map->MapPlayer()->MaxHealth());
+    }
+
     //Print options
     Helper::ClearConsoleWindow();
-    std::cout << "YOU BEAT ALL ENEMIES ON THE FLOOR!\nSELECT A POWERUP!\n\n";
+    std::cout << "YOU BEAT ALL ENEMIES ON THE FLOOR!\nYOU HEALED 5 HEALTH!\nSELECT A POWERUP!\n\n";
     std::cout << "1. ";
     pow1->PrintPower();
     std::cout << "2. ";
@@ -340,6 +347,6 @@ void Menus::PowerUpMenu()
     std::cout << "\nInput Power Choice: ";
     int powChoice = Helper::GetMenuChoice(1, 3);
 
-
+    Helper::ClearConsoleWindow();
 }
 
