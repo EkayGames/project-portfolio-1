@@ -56,21 +56,21 @@ void Powerup::PrintPower()
 
 void Powerup::RerollDuplicates(Powerup* dupe)
 {
-    bool dupe = true;
+    bool isDupe = true;
     do
     {
         SetPower(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
 
         if (_power != dupe->GetPower())
         {
-            dupe = false;
+            isDupe = false;
         }
     } while (dupe);
 }
 
 void Powerup::RerollDuplicates(Powerup* dupe, Powerup* dupe2)
 {
-    bool dupe = true;
+    bool isDupe = true;
     do
     {
         SetPower(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
@@ -78,7 +78,7 @@ void Powerup::RerollDuplicates(Powerup* dupe, Powerup* dupe2)
         if (_power != dupe->GetPower() &&
             _power != dupe2->GetPower())
         {
-            dupe = false;
+            isDupe = false;
         }
     } while (dupe);
 }
