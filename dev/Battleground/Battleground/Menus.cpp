@@ -260,7 +260,7 @@ void Menus::CombatMenu(GameMap* map, int enemy)
         if (map->Enemies()[enemy]->Health() > 0 && map->MapPlayer()->Health() > 0)
         {
             combatChoice = Helper::GetMenuChoice(1, 3);
-            enemyCombatChoice = Helper::RandomNumberGenerator(1, 3);
+            enemyCombatChoice = Combat::CalculateEnemyChoice(map, enemy);
             damage = Combat::CalculateDamage(combatChoice, enemyCombatChoice, map, enemy);
         }
 

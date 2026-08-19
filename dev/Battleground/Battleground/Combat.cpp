@@ -127,19 +127,65 @@ int Combat::CalculateDash(int userChoice, int enemyChoice, GameMap* map, int ene
     return damage;
 }
 
-void Combat::CalculateEnemyChoice(GameMap* map, int enemy)
+int Combat::CalculateEnemyChoice(GameMap* map, int enemy)
 {
+    int choice = 0;
+    int rng = 0;
     switch (map->Enemies()[enemy]->GetEnemyType())
     {
     case EnemyType::WizardShroom: //Wizard shroom behavior
-
+        rng = Helper::RandomNumberGenerator(1, 5);
+        switch (rng)
+        {
+        case 1:
+        case 2:
+        case 3:
+            choice = 1;
+            break;
+        case 4:
+            choice = 2;
+            break;
+        case 5:
+            choice = 3;
+            break;
+        }
         break;
     case EnemyType::Skeleton: //Skeleton behavior
-
+        rng = Helper::RandomNumberGenerator(1, 5);
+        switch (rng)
+        {
+        case 1:
+        case 2:
+            choice = 1;
+            break;
+        case 3:
+        case 4:
+            choice = 2;
+            break;
+        case 5:
+            choice = 3;
+            break;
+        }
         break;
 
     case EnemyType::Hippie: //Hippie behavior 
-
+        rng = Helper::RandomNumberGenerator(1, 6);
+        switch (rng)
+        {
+        case 1:
+            choice = 1;
+            break;
+        case 2:
+            choice = 2;
+            break;
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+            choice = 3;
+            break;
+        }
         break;
     }
+    return choice;
 }

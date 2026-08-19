@@ -10,7 +10,7 @@ public:
 	static int CalculateLunge(int userChoice, int enemyChoice, GameMap* map, int enemy);
 	static int CalculateBlock(int userChoice, int enemyChoice, GameMap* map, int enemy);
 	static int CalculateDash(int userChoice, int enemyChoice, GameMap* map, int enemy);
-	static void CalculateEnemyChoice(GameMap* map, int enemy);
+	static int CalculateEnemyChoice(GameMap* map, int enemy);
 
 private:
 };
