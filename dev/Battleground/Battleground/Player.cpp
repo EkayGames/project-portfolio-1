@@ -76,3 +76,8 @@ int Player::MaxHealth() const
 {
     return _maxHealth;
 }
+
+std::vector<Powerup> Player::Powers() const
+{
+    return _powers;
+}

@@ -224,6 +224,7 @@ void Menus::CombatMenu(GameMap* map, int enemy)
     bool doCombat = true;
     int combatChoice = 0;
     int enemyCombatChoice = 0;
+    int damage = 0;
     while (doCombat)
     {
         //Print menu
@@ -231,7 +232,7 @@ void Menus::CombatMenu(GameMap* map, int enemy)
         std::cout << "\n\n=======================================================\nA " << enemyName << " appears!\n\n";
         if (combatChoice != 0 && enemyCombatChoice != 0)
         {
-            Combat::PrintBattleText(combatChoice, enemyCombatChoice, enemyName, map, enemy);
+            Combat::PrintBattleText(combatChoice, enemyCombatChoice, enemyName, damage);
         }
         std::cout << "Enemy health: " << map->Enemies()[enemy]->Health() << "\n";
         std::cout << "Your health: " << map->MapPlayer()->Health() << "/" <<  map->MapPlayer()->MaxHealth() << "\n\n";
@@ -260,7 +261,7 @@ void Menus::CombatMenu(GameMap* map, int enemy)
         {
             combatChoice = Helper::GetMenuChoice(1, 3);
             enemyCombatChoice = Helper::RandomNumberGenerator(1, 3);
-            Combat::CalculateDamage(combatChoice, enemyCombatChoice, map, enemy);
+            damage = Combat::CalculateDamage(combatChoice, enemyCombatChoice, map, enemy);
         }
 
 

@@ -7,6 +7,7 @@
 - Made tile entity type variable use an enum instead of string
 - Changed nested do while loops in powerup generation to be one separate method
 - The player is now generated separately before map generation so player can keep data between floors
+- Combat now calculates lunge block and dash in their own individual methods
 
 ## Testing Completed
 - Tested if Powerup menu opens
@@ -16,4 +17,5 @@
 ## Challenges
 - Enemies were occasionally not being removed from the map upon beating them
 - Changing names caused an infinite loop which made the powerup menu blank
+- Had an error where an extra enemy was generated 
 ## Next Steps

@@ -19,6 +19,7 @@ public:
     void MaxHealth(int max);
 
     int MaxHealth() const;
+    std::vector<Powerup> Powers() const;
 
 private:
     int _maxHealth = 10;
