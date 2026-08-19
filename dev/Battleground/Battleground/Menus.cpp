@@ -235,43 +235,42 @@ void Menus::CombatMenu(GameMap* map, int enemy)
         }
         std::cout << "Enemy health: " << map->Enemies()[enemy]->Health() << "\n";
         std::cout << "Your health: " << map->MapPlayer()->Health() << "/" <<  map->MapPlayer()->MaxHealth() << "\n\n";
-        std::cout << "1. Lunge\t\t2. Defend\t\t3. Dash\n\nEnter action choice(1 2 or 3): ";
 
-        //Get user input and calculate damage
-        combatChoice = Helper::GetMenuChoice(1, 3);
-        enemyCombatChoice = Helper::RandomNumberGenerator(1, 3);
-        Combat::CalculateDamage(combatChoice, enemyCombatChoice, map, enemy);
+        if (map->Enemies()[enemy]->Health() > 0 && map->MapPlayer()->Health() > 0)
+        {
+            std::cout << "1. Lunge\t\t2. Defend\t\t3. Dash\n\nEnter action choice(1 2 or 3): ";
+        }
 
         //Win if enemy health is 0, lose if player health is 0
         if (map->Enemies()[enemy]->Health() <= 0)
         {
-            CombatWinScreen();
+            std::cout << "Press enter to return to map...";
+            Helper::PauseConsoleWindow();
             doCombat = false;
         }
         else if (map->MapPlayer()->Health() <= 0)
         {
-            LoseScreen();
+            std::cout << "Press enter to return to main menu...";
+            Helper::PauseConsoleWindow();
             doCombat = false;
         }
+
+        //Get user input and calculate damage
+        if (map->Enemies()[enemy]->Health() > 0 && map->MapPlayer()->Health() > 0)
+        {
+            combatChoice = Helper::GetMenuChoice(1, 3);
+            enemyCombatChoice = Helper::RandomNumberGenerator(1, 3);
+            Combat::CalculateDamage(combatChoice, enemyCombatChoice, map, enemy);
+        }
+
+
+
+
 
         Helper::ClearConsoleWindow();
 
 
     }
-}
-
-void Menus::LoseScreen()
-{
-    Helper::ClearConsoleWindow();
-    std::cout << "YOU LOSE\n\nPress enter to return to main menu...";
-    Helper::PauseConsoleWindow();
-}
-
-void Menus::CombatWinScreen()
-{
-    Helper::ClearConsoleWindow();
-    std::cout << "YOU WIN!\n\nPress enter to return to map...";
-    Helper::PauseConsoleWindow();
 }
 
 void Menus::NextFloorScreen()

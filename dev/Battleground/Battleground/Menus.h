@@ -10,8 +10,6 @@ public:
 	static void SettingsMenu(GameMap* map);
 	static void MapMenu(GameMap* map);
 	static void CombatMenu(GameMap* map, int enemy);
-	static void LoseScreen();
-	static void CombatWinScreen();
 	static void NextFloorScreen();
 	static void HelpMenu();
 	static void PowerUpMenu(GameMap* map);

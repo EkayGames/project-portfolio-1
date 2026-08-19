@@ -45,16 +45,55 @@ void Combat::PrintBattleText(int userChoice, int enemyChoice, std::string enemyN
 //calculate damage taken from combat turn
 void Combat::CalculateDamage(int userChoice, int enemyChoice, GameMap* map, int enemy)
 {
-    if ((userChoice == 1 && enemyChoice == 2) ||
-        (userChoice == 2 && enemyChoice == 3) ||
-        (userChoice == 3 && enemyChoice == 1))
+    switch (userChoice)
     {
-        map->Enemies()[enemy]->Health(map->Enemies()[enemy]->Health() - map->MapPlayer()->Attack());
+    case 1:
+        CalculateLunge(userChoice, enemyChoice, map, enemy);
+        break;
+    case 2:
+        CalculateBlock(userChoice, enemyChoice, map, enemy);
+        break;
+    case 3:
+        CalculateDash(userChoice, enemyChoice, map, enemy);
+        break;
     }
-    else if ((userChoice == 1 && enemyChoice == 3) ||
-        (userChoice == 2 && enemyChoice == 1) ||
-        (userChoice == 3 && enemyChoice == 2))
+}
+
+void Combat::CalculateLunge(int userChoice, int enemyChoice, GameMap* map, int enemy)
+{
+    switch (enemyChoice)
     {
+    case 2:
+        map->Enemies()[enemy]->Health(map->Enemies()[enemy]->Health() - map->MapPlayer()->Attack());
+        break;
+    case 3:
         map->MapPlayer()->Health(map->MapPlayer()->Health() - map->Enemies()[enemy]->Attack());
+        break;
+    }
+}
+
+void Combat::CalculateBlock(int userChoice, int enemyChoice, GameMap* map, int enemy)
+{
+    switch (enemyChoice)
+    {
+    case 3:
+        map->Enemies()[enemy]->Health(map->Enemies()[enemy]->Health() - map->MapPlayer()->Attack());
+        break;
+    case 1:
+        map->MapPlayer()->Health(map->MapPlayer()->Health() - map->Enemies()[enemy]->Attack());
+        break;
+    }
+}
+
+void Combat::CalculateDash(int userChoice, int enemyChoice, GameMap* map, int enemy)
+{
+    switch (enemyChoice)
+    {
+    case 1:
+        map->Enemies()[enemy]->Health(map->Enemies()[enemy]->Health() - map->MapPlayer()->Attack());
+        break;
+    case 2:
+        map->MapPlayer()->Health(map->MapPlayer()->Health() - map->Enemies()[enemy]->Attack());
+        break;
     }
 }
