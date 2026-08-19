@@ -38,7 +38,7 @@ void Powerup::PrintPower()
     switch (_power)
     {
     case Power::HealthUp:
-        std::cout << "Increase Health by 5\n";
+        std::cout << "Increase  max Health by 5\n";
         break;
     case Power::DamageUp:
         std::cout << "Increase base damage by 1\n";

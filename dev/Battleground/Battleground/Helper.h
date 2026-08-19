@@ -109,14 +109,14 @@ namespace Helper
 					{
 						return inputInt;
 					}
-					else std::cout << "Invalid input, try again: ";
+					else std::cout << "Invalid input. Enter number between " << min << " and " << max << ": ";
 				}
 				catch (...)
 				{
-					std::cout << "Invalid input, try again: ";
+					std::cout << "Invalid input. Enter number between " << min << " and " << max << ": ";
 				}
 			}
-			else std::cout << "Invalid input, try again: ";
+			else std::cout << "Invalid input. Enter number between " << min << " and " << max << ": ";
 
 
 

@@ -74,17 +74,17 @@ void GameMap::GeneratePlayerPos(std::vector<int>& usedTiles)
 //Generate an enemy with ID to assign to a tile. ID is random between number of tiles and cannot be used tile
 int GameMap::GenerateEnemy(std::vector<int>& usedTiles)
 {
-	int enemyTile = Helper::RandomNumberGenerator(0, _tiles.size() - 1);
-	for (auto i : usedTiles)
+	int enemyTile;
+
+	do
 	{
-		if (enemyTile == i)
-		{
-			enemyTile = GenerateEnemy(usedTiles); //if enemy is on occupied tile rerun
-		}
-	}
+		enemyTile = Helper::RandomNumberGenerator(0, _tiles.size() - 1);
+
+	} while (std::find(usedTiles.begin(), usedTiles.end(), enemyTile) != usedTiles.end());
+
 
 	EnemyType randType = static_cast<EnemyType>(Helper::RandomNumberGenerator(
-		static_cast<int>(EnemyType::WizardShroom), 
+		static_cast<int>(EnemyType::Error) + 1, 
 		static_cast<int>(EnemyType::LAST) - 1));
 
 	int attack;

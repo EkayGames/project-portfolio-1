@@ -119,7 +119,7 @@ void Menus::MapMenu(GameMap* map)
             //Get user input for direction
             if (userInput.size() != 1)
             {
-                std::cout << "Invalid input, Try again: ";
+                std::cout << "Invalid input. Please use W A S or D: ";
             }
             else
             {
@@ -167,7 +167,7 @@ void Menus::MapMenu(GameMap* map)
 
                     break;
                 default:
-                    std::cout << "Invalid input, Try again: ";
+                    std::cout << "Invalid input. Please use W A S or D: ";
                 }
             }
             
@@ -234,7 +234,7 @@ void Menus::CombatMenu(GameMap* map, int enemy)
             Combat::PrintBattleText(combatChoice, enemyCombatChoice, enemyName, map, enemy);
         }
         std::cout << "Enemy health: " << map->Enemies()[enemy]->Health() << "\n";
-        std::cout << "Your health: " << map->MapPlayer()->Health() << "\n\n";
+        std::cout << "Your health: " << map->MapPlayer()->Health() << "/" <<  map->MapPlayer()->MaxHealth() << "\n\n";
         std::cout << "1. Lunge\t\t2. Defend\t\t3. Dash\n\nEnter action choice(1 2 or 3): ";
 
         //Get user input and calculate damage
