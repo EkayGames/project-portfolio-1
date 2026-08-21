@@ -62,7 +62,7 @@ void Powerup::RerollDuplicates(Player* player)
     {
         SetPower(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
 
-        if (std::find(player->Powers().begin(), player->Powers().end(), _power) != player->Powers().end())
+        if (std::find(player->Powers().begin(), player->Powers().end(), _power) == player->Powers().end())
         {
             isDupe = false;
         }
@@ -77,7 +77,7 @@ void Powerup::RerollDuplicates(Powerup* dupe, Player* player)
         SetPower(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
 
         if (_power != dupe->GetPower() && 
-            std::find(player->Powers().begin(), player->Powers().end(), _power) != player->Powers().end())
+            std::find(player->Powers().begin(), player->Powers().end(), _power) == player->Powers().end())
         {
             isDupe = false;
         }
@@ -93,7 +93,7 @@ void Powerup::RerollDuplicates(Powerup* dupe, Powerup* dupe2, Player* player)
 
         if (_power != dupe->GetPower() &&
             _power != dupe2->GetPower() &&
-            std::find(player->Powers().begin(), player->Powers().end(), _power) != player->Powers().end())
+            std::find(player->Powers().begin(), player->Powers().end(), _power) == player->Powers().end())
         {
             isDupe = false;
         }

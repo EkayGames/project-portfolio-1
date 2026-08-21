@@ -300,17 +300,23 @@ void Menus::PowerUpMenu(GameMap* map)
 {
     //Generate powerup option 1
     Powerup* pow1 = new Powerup(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
-    pow1->RerollDuplicates(map->MapPlayer());
+
+    if (std::find(map->MapPlayer()->Powers().begin(), map->MapPlayer()->Powers().end(), pow1->GetPower()) != map->MapPlayer()->Powers().end())
+    {
+        pow1->RerollDuplicates(map->MapPlayer());
+    }
     //Generate powerup option 2
     Powerup* pow2 = new Powerup(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
-    if (pow2->GetPower() == pow1->GetPower())
+    if (pow2->GetPower() == pow1->GetPower() ||
+        std::find(map->MapPlayer()->Powers().begin(), map->MapPlayer()->Powers().end(), pow2->GetPower()) != map->MapPlayer()->Powers().end())
     {
         pow2->RerollDuplicates(pow1, map->MapPlayer());
     }
     //Generate powerup option 3
     Powerup* pow3 = new Powerup(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
     if (pow3->GetPower() == pow1->GetPower() ||
-        pow3->GetPower() == pow2->GetPower())
+        pow3->GetPower() == pow2->GetPower() ||
+        std::find(map->MapPlayer()->Powers().begin(), map->MapPlayer()->Powers().end(), pow3->GetPower()) != map->MapPlayer()->Powers().end())
     {
         pow3->RerollDuplicates(pow1, pow2, map->MapPlayer());
     }

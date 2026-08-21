@@ -19,7 +19,7 @@ public:
     void MaxHealth(int max);
 
     int MaxHealth() const;
-    std::vector<Power> Powers() const;
+    const std::vector<Power>& Powers() const;
 
 private:
     int _maxHealth = 10;

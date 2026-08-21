@@ -77,7 +77,7 @@ int Player::MaxHealth() const
     return _maxHealth;
 }
 
-std::vector<Power> Player::Powers() const
+const std::vector<Power>& Player::Powers() const
 {
     return _powers;
 }
