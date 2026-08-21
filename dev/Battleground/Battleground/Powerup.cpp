@@ -1,4 +1,5 @@
 #include "Powerup.h"
+#include "Player.h"
 
 Powerup::Powerup(int pow)
 {
@@ -54,21 +55,36 @@ void Powerup::PrintPower()
     }
 }
 
-void Powerup::RerollDuplicates(Powerup* dupe)
+void Powerup::RerollDuplicates(Player* player)
 {
     bool isDupe = true;
     do
     {
         SetPower(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
 
-        if (_power != dupe->GetPower())
+        if (std::find(player->Powers().begin(), player->Powers().end(), _power) != player->Powers().end())
         {
             isDupe = false;
         }
     } while (isDupe);
 }
 
-void Powerup::RerollDuplicates(Powerup* dupe, Powerup* dupe2)
+void Powerup::RerollDuplicates(Powerup* dupe, Player* player)
+{
+    bool isDupe = true;
+    do
+    {
+        SetPower(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
+
+        if (_power != dupe->GetPower() && 
+            std::find(player->Powers().begin(), player->Powers().end(), _power) != player->Powers().end())
+        {
+            isDupe = false;
+        }
+    } while (isDupe);
+}
+
+void Powerup::RerollDuplicates(Powerup* dupe, Powerup* dupe2, Player* player)
 {
     bool isDupe = true;
     do
@@ -76,7 +92,8 @@ void Powerup::RerollDuplicates(Powerup* dupe, Powerup* dupe2)
         SetPower(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
 
         if (_power != dupe->GetPower() &&
-            _power != dupe2->GetPower())
+            _power != dupe2->GetPower() &&
+            std::find(player->Powers().begin(), player->Powers().end(), _power) != player->Powers().end())
         {
             isDupe = false;
         }

@@ -300,18 +300,19 @@ void Menus::PowerUpMenu(GameMap* map)
 {
     //Generate powerup option 1
     Powerup* pow1 = new Powerup(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
+    pow1->RerollDuplicates(map->MapPlayer());
     //Generate powerup option 2
     Powerup* pow2 = new Powerup(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
     if (pow2->GetPower() == pow1->GetPower())
     {
-        pow2->RerollDuplicates(pow1);
+        pow2->RerollDuplicates(pow1, map->MapPlayer());
     }
     //Generate powerup option 3
     Powerup* pow3 = new Powerup(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
     if (pow3->GetPower() == pow1->GetPower() ||
         pow3->GetPower() == pow2->GetPower())
     {
-        pow3->RerollDuplicates(pow1, pow2);
+        pow3->RerollDuplicates(pow1, pow2, map->MapPlayer());
     }
 
     map->MapPlayer()->Health(map->MapPlayer()->Health() + 5); //Heal 5 health
@@ -335,13 +336,13 @@ void Menus::PowerUpMenu(GameMap* map)
     switch (powChoice)
     {
     case 1:
-        map->MapPlayer()->ApplyPower(pow1);
+        map->MapPlayer()->ApplyPower(pow1->GetPower());
         break;
     case 2:
-        map->MapPlayer()->ApplyPower(pow2);
+        map->MapPlayer()->ApplyPower(pow2->GetPower());
         break;
     case 3:
-        map->MapPlayer()->ApplyPower(pow3);
+        map->MapPlayer()->ApplyPower(pow3->GetPower());
         break;
     }
 

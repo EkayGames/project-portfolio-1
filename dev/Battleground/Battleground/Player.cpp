@@ -40,9 +40,9 @@ Player& Player::operator=(const Player& other)
 }
 
 //Increase player stats, or add powerup based on power input
-void Player::ApplyPower(Powerup* pow)
+void Player::ApplyPower(Power pow)
 {
-    switch (pow->GetPower())
+    switch (pow)
     {
     case Power::HealthUp:
         _maxHealth = _maxHealth + 5;
@@ -77,7 +77,7 @@ int Player::MaxHealth() const
     return _maxHealth;
 }
 
-std::vector<Powerup> Player::Powers() const
+std::vector<Power> Player::Powers() const
 {
     return _powers;
 }

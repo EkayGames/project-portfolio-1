@@ -14,15 +14,15 @@ public:
     Player(const Player& other);
     Player& operator=(const Player& other);
 
-    void ApplyPower(Powerup* pow);
+    void ApplyPower(Power pow);
 
     void MaxHealth(int max);
 
     int MaxHealth() const;
-    std::vector<Powerup> Powers() const;
+    std::vector<Power> Powers() const;
 
 private:
     int _maxHealth = 10;
-    std::vector<Powerup> _powers;
+    std::vector<Power> _powers;
 };
 

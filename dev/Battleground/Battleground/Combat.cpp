@@ -21,7 +21,7 @@ void Combat::PrintBattleText(int userChoice, int enemyChoice, std::string enemyN
 
         for (auto& i : map->MapPlayer()->Powers())
         {
-            if (i.GetPower() == Power::BlockDamage)
+            if (i == Power::BlockDamage)
             {
                 std::cout << "\nYou retaliated for 1 damage!";
                 break;
@@ -49,7 +49,7 @@ void Combat::PrintBattleText(int userChoice, int enemyChoice, std::string enemyN
         bool hasPower = false;
         for (auto& i : map->MapPlayer()->Powers())
         {
-            if (i.GetPower() == Power::DashDamage)
+            if (i == Power::DashDamage)
             {
                 std::cout << "You grazed " << enemyName << ", dealing " << damage << " damage!";
                 hasPower = true;
@@ -92,7 +92,7 @@ int Combat::CalculateLunge(int userChoice, int enemyChoice, GameMap* map, int en
 
         for (auto& i : map->MapPlayer()->Powers())
         {
-            if (i.GetPower() == Power::LungeDamage)
+            if (i == Power::LungeDamage)
             {
                 map->Enemies()[enemy]->Health(map->Enemies()[enemy]->Health() - (map->MapPlayer()->Attack() * 2));
                 damage = map->MapPlayer()->Attack() * 2;
@@ -129,7 +129,7 @@ int Combat::CalculateBlock(int userChoice, int enemyChoice, GameMap* map, int en
         
         for (auto& i : map->MapPlayer()->Powers())
         {
-            if (i.GetPower() == Power::BlockDamage)
+            if (i == Power::BlockDamage)
             {
                 map->Enemies()[enemy]->Health(map->Enemies()[enemy]->Health() - 1);
                 break;
@@ -157,7 +157,7 @@ int Combat::CalculateDash(int userChoice, int enemyChoice, GameMap* map, int ene
     case 3:
         for (auto& i : map->MapPlayer()->Powers())
         {
-            if (i.GetPower() == Power::DashDamage)
+            if (i == Power::DashDamage)
             {
                 map->Enemies()[enemy]->Health(map->Enemies()[enemy]->Health() - (map->MapPlayer()->Attack() / 2));
                 damage = map->MapPlayer()->Attack() / 2;
