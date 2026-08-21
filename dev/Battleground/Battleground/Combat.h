@@ -5,7 +5,7 @@
 class Combat
 {
 public:
-	static void PrintBattleText(int userChoice, int enemyChoice, std::string enemyName, int damage);
+	static void PrintBattleText(int userChoice, int enemyChoice, std::string enemyName, int damage, GameMap* map);
 	static int CalculateDamage(int userChoice, int enemyChoice, GameMap* map, int enemy);
 	static int CalculateLunge(int userChoice, int enemyChoice, GameMap* map, int enemy);
 	static int CalculateBlock(int userChoice, int enemyChoice, GameMap* map, int enemy);

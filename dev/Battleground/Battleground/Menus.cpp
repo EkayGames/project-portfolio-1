@@ -232,7 +232,7 @@ void Menus::CombatMenu(GameMap* map, int enemy)
         std::cout << "\n\n=======================================================\nA " << enemyName << " appears!\n\n";
         if (combatChoice != 0 && enemyCombatChoice != 0)
         {
-            Combat::PrintBattleText(combatChoice, enemyCombatChoice, enemyName, damage);
+            Combat::PrintBattleText(combatChoice, enemyCombatChoice, enemyName, damage, map);
         }
         std::cout << "Enemy health: " << map->Enemies()[enemy]->Health() << "\n";
         std::cout << "Your health: " << map->MapPlayer()->Health() << "/" <<  map->MapPlayer()->MaxHealth() << "\n\n";

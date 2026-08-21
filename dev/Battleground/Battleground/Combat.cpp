@@ -1,7 +1,7 @@
 #include "Combat.h"
 
 //Display text based on combat choices
-void Combat::PrintBattleText(int userChoice, int enemyChoice, std::string enemyName, int damage)
+void Combat::PrintBattleText(int userChoice, int enemyChoice, std::string enemyName, int damage, GameMap* map)
 {
     if (userChoice == 1 && enemyChoice == 1)
     {
@@ -37,7 +37,20 @@ void Combat::PrintBattleText(int userChoice, int enemyChoice, std::string enemyN
     }
     else if (userChoice == 3 && enemyChoice == 3)
     {
-        std::cout << "You both swung at each other and missed!";
+        bool hasPower = false;
+        for (auto& i : map->MapPlayer()->Powers())
+        {
+            if (i.GetPower() == Power::DashDamage)
+            {
+                std::cout << "You grazed " << enemyName << ", dealing " << damage << " damage!";
+                hasPower = true;
+                break;
+            }
+        }
+        if (hasPower == false)
+        {
+            std::cout << "You both swung at each other and missed!";
+        }
     }
     std::cout << "\n";
 }
@@ -122,6 +135,17 @@ int Combat::CalculateDash(int userChoice, int enemyChoice, GameMap* map, int ene
     case 2:
         map->MapPlayer()->Health(map->MapPlayer()->Health() - map->Enemies()[enemy]->Attack());
         damage = map->Enemies()[enemy]->Attack();
+        break;
+    case 3:
+        for (auto& i : map->MapPlayer()->Powers())
+        {
+            if (i.GetPower() == Power::DashDamage)
+            {
+                map->Enemies()[enemy]->Health(map->Enemies()[enemy]->Health() - (map->MapPlayer()->Attack() / 2));
+                damage = map->MapPlayer()->Attack() / 2;
+                break;
+            }
+        }
         break;
     }
     return damage;
