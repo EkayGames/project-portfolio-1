@@ -47,7 +47,7 @@ void Powerup::PrintPower()
         std::cout << "Lunge does double damage on win\n";
         break;
     case Power::BlockDamage:
-        std::cout << "Block has a chance to stun enemy\n";
+        std::cout << "Block deals 1 damage on loss\n";
         break;
     case Power::DashDamage:
         std::cout << "Dash does half damage on tie\n";

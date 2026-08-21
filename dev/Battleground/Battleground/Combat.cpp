@@ -18,6 +18,15 @@ void Combat::PrintBattleText(int userChoice, int enemyChoice, std::string enemyN
     else if (userChoice == 2 && enemyChoice == 1)
     {
         std::cout << enemyName << " broke your guard, dealing " << damage << " damage!";
+
+        for (auto& i : map->MapPlayer()->Powers())
+        {
+            if (i.GetPower() == Power::BlockDamage)
+            {
+                std::cout << "\nYou retaliated for 1 damage!";
+                break;
+            }
+        }
     }
     else if (userChoice == 2 && enemyChoice == 2)
     {
@@ -117,6 +126,7 @@ int Combat::CalculateBlock(int userChoice, int enemyChoice, GameMap* map, int en
         break;
     case 1:
         map->MapPlayer()->Health(map->MapPlayer()->Health() - map->Enemies()[enemy]->Attack());
+        map->Enemies()[enemy]->Health(map->Enemies()[enemy]->Health() - 1);
         damage = map->Enemies()[enemy]->Attack();
         break;
     }

@@ -234,7 +234,7 @@ void Menus::CombatMenu(GameMap* map, int enemy)
         {
             Combat::PrintBattleText(combatChoice, enemyCombatChoice, enemyName, damage, map);
         }
-        std::cout << "Enemy health: " << map->Enemies()[enemy]->Health() << "\n";
+        std::cout << "\nEnemy health: " << map->Enemies()[enemy]->Health() << "\n";
         std::cout << "Your health: " << map->MapPlayer()->Health() << "/" <<  map->MapPlayer()->MaxHealth() << "\n\n";
 
         if (map->Enemies()[enemy]->Health() > 0 && map->MapPlayer()->Health() > 0)
@@ -251,6 +251,7 @@ void Menus::CombatMenu(GameMap* map, int enemy)
         }
         else if (map->MapPlayer()->Health() <= 0)
         {
+            std::cout << "YOU LOSE!\n";
             std::cout << "Press enter to return to main menu...";
             Helper::PauseConsoleWindow();
             doCombat = false;
