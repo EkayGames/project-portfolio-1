@@ -9,6 +9,11 @@ Entity::Entity(int health, int attack, int x, int y) :
     _pos._ypos = y;
 }
 
+Entity::Entity(int health, int attack) :
+    _health(health), _attack(attack)
+{
+}
+
 Entity::~Entity()
 {
 

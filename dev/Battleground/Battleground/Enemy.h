@@ -8,6 +8,7 @@ enum class EnemyType
     WizardShroom,
     Skeleton,
     Hippie,
+    Unicorn,
     LAST
 };
 
@@ -23,6 +24,8 @@ public:
     Enemy& operator=(const Enemy& other);
 
     void PrintEnemy();
+
+    void SetEnemyType(EnemyType type);
 
     EnemyType GetEnemyType() const;
 

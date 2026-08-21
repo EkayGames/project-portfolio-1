@@ -17,19 +17,19 @@ void GameMap::GenerateMap()
 	{
 		for (int j = 0; j < _mapX; j++)
 		{
-			Tile* tile = new Tile(j, i, "Empty");
+			Tile* tile = new Tile(j, i, EntityType::Empty);
 			_tiles.push_back(tile);
 		}
 	}
 
 	std::vector<int> usedTiles; //Keeps track of used tiles so enemies and players dont overlap
-	GeneratePlayer(usedTiles);
+	GeneratePlayerPos(usedTiles);
 
 	for (int i = 0; i < _numEnemies; i++) //generate new enemy for each _numEnemies
 	{
 		int newEnemy = GenerateEnemy(usedTiles);
 		usedTiles.push_back(newEnemy);
-		_tiles[newEnemy]->EntityType("Enemy");
+		_tiles[newEnemy]->SetEntityType(EntityType::Enemy);
 	}
 }
 
@@ -62,29 +62,29 @@ void GameMap::PrintMap()
 }
 
 //Generate and add a player to the map
-void GameMap::GeneratePlayer(std::vector<int>& usedTiles)
+void GameMap::GeneratePlayerPos(std::vector<int>& usedTiles)
 {
 	int playerTile = Helper::RandomNumberGenerator(0, _tiles.size() - 1);
-	_tiles[playerTile]->EntityType("Player");
+	_tiles[playerTile]->SetEntityType(EntityType::Player);
 	usedTiles.push_back(playerTile);
 
-	_player = new Player(10, 5, _tiles[playerTile]->Pos());
+	_player->Pos(_tiles[playerTile]->Pos()._xpos, _tiles[playerTile]->Pos()._ypos);
 }
 
 //Generate an enemy with ID to assign to a tile. ID is random between number of tiles and cannot be used tile
 int GameMap::GenerateEnemy(std::vector<int>& usedTiles)
 {
-	int enemyTile = Helper::RandomNumberGenerator(0, _tiles.size() - 1);
-	for (auto i : usedTiles)
+	int enemyTile;
+
+	do
 	{
-		if (enemyTile == i)
-		{
-			enemyTile = GenerateEnemy(usedTiles); //if enemy is on occupied tile rerun
-		}
-	}
+		enemyTile = Helper::RandomNumberGenerator(0, _tiles.size() - 1);
+
+	} while (std::find(usedTiles.begin(), usedTiles.end(), enemyTile) != usedTiles.end());
+
 
 	EnemyType randType = static_cast<EnemyType>(Helper::RandomNumberGenerator(
-		static_cast<int>(EnemyType::WizardShroom), 
+		static_cast<int>(EnemyType::Error) + 1, 
 		static_cast<int>(EnemyType::LAST) - 1));
 
 	int attack;
@@ -104,6 +104,10 @@ int GameMap::GenerateEnemy(std::vector<int>& usedTiles)
 		attack = 1;
 		health = 25;
 		break;
+	case EnemyType::Unicorn:
+		attack = 2;
+		health = 12;
+		break;
 	}
 
 		Enemy* newEnemy = new Enemy(health, attack, _tiles[enemyTile]->Pos(), randType);
@@ -120,12 +124,12 @@ void GameMap::UpdateMap()
 {
 	for (auto i : _tiles)
 	{
-		i->EntityType("Empty");
+		i->SetEntityType(EntityType::Empty);
 
 		if (i->Pos()._xpos == _player->Pos()._xpos && //If Player pos matches tile pos, update entity type
 			i->Pos()._ypos == _player->Pos()._ypos)
 		{
-			i->EntityType("Player");
+			i->SetEntityType(EntityType::Player);
 		}
 		
 		for (auto j : _enemies) //Check each active enemy
@@ -133,7 +137,7 @@ void GameMap::UpdateMap()
 			if (i->Pos()._xpos == j->Pos()._xpos && //If Enemy pos matches tile pos, update entity type
 				i->Pos()._ypos == j->Pos()._ypos)
 			{
-				i->EntityType("Enemy");
+				i->SetEntityType(EntityType::Enemy);
 			}
 		}
 	}
@@ -183,6 +187,11 @@ void GameMap::X(int x)
 void GameMap::Y(int y)
 {
 	_mapY = y;
+}
+
+void GameMap::MapPlayer(Player* player)
+{
+	_player = player;
 }
 
 void GameMap::EnemyCount(int enemies)

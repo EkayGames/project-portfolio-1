@@ -55,7 +55,25 @@ Going into week 3 my priorities are to plan out how I want to make the gameplay 
 
 ### Week 3
 
-Stay tuned, this stand up is coming soon...
+ Overview – What did you work on this past week?
+
+The past week has been huge for improving actual gameplay. The biggest thing I've added is a whole powerup system so the player gets powers between floors. Different enemies also behave differently, making the game easier if you know which enemy does what.
+
+ Improvements – What changes, refinements, or new features did you make?
+
+I improved the general gameplay loop. With everything added the player can now actually beat floor 1 way more often. Before it was difficult and too luck based. I refactored some repetitive code by putting them in methods, and started using enums for previous and new things instead of strings.
+
+ Challenges – What obstacles did you encounter, and how are you addressing them?
+
+Oh boy I had one major pain this week. An extra enemy was being generated in my enemies vector, which would make it so sometimes an enemy doesn't disappear and is replaced by a new one. Debugging this took a good amount of time.
+
+ Feedback – What feedback have you received, and how will it influence your next steps?
+
+Kari was king enough to give me a suggestion for refactoring, so going forward I'll look out for repetitive code and turn that code into their own methods.
+
+ Next Steps – What is your primary goal for Week 4?
+
+The overall goal next week is to polish it and make it look nice. I hope to get a couple more features in though like scaling enemies and adding new enemies
 
 ### Week 4
 

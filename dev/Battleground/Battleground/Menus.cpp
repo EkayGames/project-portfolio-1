@@ -30,8 +30,8 @@ void Menus::MainMenu(GameMap* map)
                                                  \_/__/                                                                                                                                                      
 )";
         std::cout << "\033[0m";
-        std::cout << "1. Begin Game\n2. Settings\n3. Help\n4. Exit\n\nEnter Menu Option: ";
-        menuChoice = Helper::GetMenuChoice(1, 4);
+        std::cout << "1. Begin Game\n2. Settings\n3. Help\n4. Bestiary\n5. Exit\n\nEnter Menu Option: ";
+        menuChoice = Helper::GetMenuChoice(1, 5);
 
         switch (menuChoice)
         {
@@ -54,6 +54,9 @@ void Menus::MainMenu(GameMap* map)
             HelpMenu();
             break;
         case 4: //Exit game
+            BestiaryMenu();
+            break;
+        case 5:
             run = false;
             break;
         }
@@ -102,13 +105,14 @@ void Menus::SettingsMenu(GameMap* map)
 void Menus::MapMenu(GameMap* map)
 {
     bool run = true;
+    map->MapPlayer(new Player(10, 5));
     map->GenerateMap();
     map->PrintMap();
     std::string userInput;
 
     while (run)
     {
-        std::cout << "Input W A S or D to move up left down or right.\n";
+        std::cout << "Input W A S or D to move up left down or right. Input E to exit to menu.\n";
 
         bool doInput = true;
         while (doInput)
@@ -118,7 +122,7 @@ void Menus::MapMenu(GameMap* map)
             //Get user input for direction
             if (userInput.size() != 1)
             {
-                std::cout << "Invalid input, Try again: ";
+                std::cout << "Invalid input. Please use W A S D or E: ";
             }
             else
             {
@@ -165,8 +169,14 @@ void Menus::MapMenu(GameMap* map)
                     doInput = false;
 
                     break;
+                case 'e':
+                case 'E':
+                    Helper::ClearConsoleWindow();
+                    map->GameReset();
+                    return;
+                    break;
                 default:
-                    std::cout << "Invalid input, Try again: ";
+                    std::cout << "Invalid input. Please use W A S D or E: ";
                 }
             }
             
@@ -180,6 +190,7 @@ void Menus::MapMenu(GameMap* map)
                     CombatMenu(map, i);
                     map->Enemies().erase(map->Enemies().begin() + i);
                     
+                    break;
                 }
             }
         }
@@ -196,7 +207,7 @@ void Menus::MapMenu(GameMap* map)
         if (map->Enemies().size() == 0)
         {
             map->GenerateMap();
-            NextFloorScreen();
+            PowerUpMenu(map);
         }
         
         map->PrintMap();
@@ -218,10 +229,14 @@ void Menus::CombatMenu(GameMap* map, int enemy)
     case EnemyType::Hippie:
         enemyName = "Hippie";
         break;
+    case EnemyType::Unicorn:
+        enemyName = "Unicorn";
+        break;
     }
     bool doCombat = true;
     int combatChoice = 0;
     int enemyCombatChoice = 0;
+    int damage = 0;
     while (doCombat)
     {
         //Print menu
@@ -229,47 +244,47 @@ void Menus::CombatMenu(GameMap* map, int enemy)
         std::cout << "\n\n=======================================================\nA " << enemyName << " appears!\n\n";
         if (combatChoice != 0 && enemyCombatChoice != 0)
         {
-            Combat::PrintBattleText(combatChoice, enemyCombatChoice, enemyName, map, enemy);
+            Combat::PrintBattleText(combatChoice, enemyCombatChoice, enemyName, damage, map);
         }
-        std::cout << "Enemy health: " << map->Enemies()[enemy]->Health() << "\n";
-        std::cout << "Your health: " << map->MapPlayer()->Health() << "\n\n";
-        std::cout << "1. Lunge\t\t2. Defend\t\t3. Dash\n\nEnter action choice(1 2 or 3): ";
+        std::cout << "\nEnemy health: " << map->Enemies()[enemy]->Health() << "\n";
+        std::cout << "Your health: " << map->MapPlayer()->Health() << "/" <<  map->MapPlayer()->MaxHealth() << "\n\n";
 
-        //Get user input and calculate damage
-        combatChoice = Helper::GetMenuChoice(1, 3);
-        enemyCombatChoice = Helper::RandomNumberGenerator(1, 3);
-        Combat::CalculateDamage(combatChoice, enemyCombatChoice, map, enemy);
+        if (map->Enemies()[enemy]->Health() > 0 && map->MapPlayer()->Health() > 0)
+        {
+            std::cout << "1. Lunge\t\t2. Defend\t\t3. Dash\n\nEnter action choice(1 2 or 3): ";
+        }
 
         //Win if enemy health is 0, lose if player health is 0
         if (map->Enemies()[enemy]->Health() <= 0)
         {
-            CombatWinScreen();
+            std::cout << "Press enter to return to map...";
+            Helper::PauseConsoleWindow();
             doCombat = false;
         }
         else if (map->MapPlayer()->Health() <= 0)
         {
-            LoseScreen();
+            std::cout << "YOU LOSE!\n";
+            std::cout << "Press enter to return to main menu...";
+            Helper::PauseConsoleWindow();
             doCombat = false;
         }
+
+        //Get user input and calculate damage
+        if (map->Enemies()[enemy]->Health() > 0 && map->MapPlayer()->Health() > 0)
+        {
+            combatChoice = Helper::GetMenuChoice(1, 3);
+            enemyCombatChoice = Combat::CalculateEnemyChoice(map, enemy);
+            damage = Combat::CalculateDamage(combatChoice, enemyCombatChoice, map, enemy);
+        }
+
+
+
+
 
         Helper::ClearConsoleWindow();
 
 
     }
-}
-
-void Menus::LoseScreen()
-{
-    Helper::ClearConsoleWindow();
-    std::cout << "YOU LOSE\n\nPress enter to return to main menu...";
-    Helper::PauseConsoleWindow();
-}
-
-void Menus::CombatWinScreen()
-{
-    Helper::ClearConsoleWindow();
-    std::cout << "YOU WIN!\n\nPress enter to return to map...";
-    Helper::PauseConsoleWindow();
 }
 
 void Menus::NextFloorScreen()
@@ -284,9 +299,136 @@ void Menus::HelpMenu()
     Helper::ClearConsoleWindow();
     std::cout << "Instructions\n===============\nDefeat all enemies on the map to move to the next one!\n";
     std::cout << "Enter W A S D to move around the map and reach enemies!\n";
-    std::cout << "Lunge beats block, block beats dash, and dash beats lunge!\n\nPress any button to return to the main menu...";
+    std::cout << "Lunge beats block, block beats dash, and dash beats lunge!\nFor the best experience, expand the window vertically a bit.\n\n";
+    std::cout << "Press enter to return to main menu...";
 
     Helper::PauseConsoleWindow();
     Helper::ClearConsoleWindow();
+}
+
+void Menus::PowerUpMenu(GameMap* map)
+{
+    //Generate powerup option 1
+    Powerup* pow1 = new Powerup(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
+
+    if (std::find(map->MapPlayer()->Powers().begin(), map->MapPlayer()->Powers().end(), pow1->GetPower()) != map->MapPlayer()->Powers().end())
+    {
+        pow1->RerollDuplicates(map->MapPlayer());
+    }
+    //Generate powerup option 2
+    Powerup* pow2 = new Powerup(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
+    if (pow2->GetPower() == pow1->GetPower() ||
+        std::find(map->MapPlayer()->Powers().begin(), map->MapPlayer()->Powers().end(), pow2->GetPower()) != map->MapPlayer()->Powers().end())
+    {
+        pow2->RerollDuplicates(pow1, map->MapPlayer());
+    }
+    //Generate powerup option 3
+    Powerup* pow3 = new Powerup(Helper::RandomNumberGenerator(1, static_cast<int>(Power::Count) - 1));
+    if (pow3->GetPower() == pow1->GetPower() ||
+        pow3->GetPower() == pow2->GetPower() ||
+        std::find(map->MapPlayer()->Powers().begin(), map->MapPlayer()->Powers().end(), pow3->GetPower()) != map->MapPlayer()->Powers().end())
+    {
+        pow3->RerollDuplicates(pow1, pow2, map->MapPlayer());
+    }
+
+    map->MapPlayer()->Health(map->MapPlayer()->Health() + map->MapPlayer()->HealRate()); //Heal health
+    if (map->MapPlayer()->Health() > map->MapPlayer()->MaxHealth()) //If player health goes higher than max health, set health to max health
+    {
+        map->MapPlayer()->Health(map->MapPlayer()->MaxHealth());
+    }
+
+    //Print options
+    Helper::ClearConsoleWindow();
+    std::cout << "YOU BEAT ALL ENEMIES ON THE FLOOR!\nYOU HEALED 5 HEALTH!\nSELECT A POWERUP!\n\n";
+    std::cout << "1. ";
+    pow1->PrintPower();
+    std::cout << "2. ";
+    pow2->PrintPower();
+    std::cout << "3. ";
+    pow3->PrintPower();
+    //Get choice
+    std::cout << "\nInput Power Choice: ";
+    int powChoice = Helper::GetMenuChoice(1, 3);
+    switch (powChoice)
+    {
+    case 1:
+        map->MapPlayer()->ApplyPower(pow1->GetPower());
+        break;
+    case 2:
+        map->MapPlayer()->ApplyPower(pow2->GetPower());
+        break;
+    case 3:
+        map->MapPlayer()->ApplyPower(pow3->GetPower());
+        break;
+    }
+
+    Helper::ClearConsoleWindow();
+}
+
+void Menus::BestiaryMenu()
+{
+    bool run = true;
+    Enemy enemy = Enemy(0, 0, 0, 0, EnemyType::Error);
+    int menuChoice = 0;
+    while (run)
+    {
+        Helper::ClearConsoleWindow();
+        std::cout << R"(
+ ____                    __                                     
+/\  _`\                 /\ \__  __                              
+\ \ \L\ \     __    ____\ \ ,_\/\_\     __     _ __   __  __    
+ \ \  _ <'  /'__`\ /',__\\ \ \/\/\ \  /'__`\  /\`'__\/\ \/\ \   
+  \ \ \L\ \/\  __//\__, `\\ \ \_\ \ \/\ \L\.\_\ \ \/ \ \ \_\ \  
+   \ \____/\ \____\/\____/ \ \__\\ \_\ \__/.\_\\ \_\  \/`____ \ 
+    \/___/  \/____/\/___/   \/__/ \/_/\/__/\/_/ \/_/   `/___/> \
+                                                          /\___/
+                                                          \/__/ 
+)";
+
+        std::cout << "\n\nWelome to the Bestiary!\nHere you can see the stats of all enemies in the game, including the chance of them using their preferred attack pattern!\n";
+        std::cout << "You can't see their odds of using other attacks though...that's secret!";
+        std::cout << "\n\n1. Wizard Shroom\n2. Skeleton\n3. Hippie\n4. Unicorn\n5. Exit\n\n";
+        std::cout << "Enter Menu Option: ";
+        menuChoice = Helper::GetMenuChoice(1, 5);
+        Helper::ClearConsoleWindow();
+        switch (menuChoice)
+        {
+        case 1:
+            enemy.SetEnemyType(EnemyType::WizardShroom);
+            enemy.PrintEnemy();
+            std::cout << "\n=======================================================\n";
+            std::cout << "WIZARD SHROOM\nHealth: 5\nAttack: 5\nAttack Preference: Lunge (60% chance)\n\n";
+            std::cout << "Press enter to return to bestiary menu...";
+            Helper::PauseConsoleWindow();
+            break;
+        case 2:
+            enemy.SetEnemyType(EnemyType::Skeleton);
+            enemy.PrintEnemy();
+            std::cout << "\n=======================================================\n";
+            std::cout << "SKELETON\nHealth: 10\nAttack: 3\nAttack Preference: Lunge and Block (40% chance each)\n\n";
+            std::cout << "Press enter to return to bestiary menu...";
+            Helper::PauseConsoleWindow();
+            break;
+        case 3:
+            enemy.SetEnemyType(EnemyType::Hippie);
+            enemy.PrintEnemy();
+            std::cout << "\n=======================================================\n";
+            std::cout << "HIPPIE\nHealth: 25\nAttack: 1\nAttack Preference: Dash (66% chance)\n\n";
+            std::cout << "Press enter to return to bestiary menu...";
+            Helper::PauseConsoleWindow();
+            break;
+        case 4:
+            enemy.SetEnemyType(EnemyType::Unicorn);
+            enemy.PrintEnemy();
+            std::cout << "\n=======================================================\n";
+            std::cout << "UNICORN\nHealth: 12\nAttack: 2\nAttack Preference: Dash and Lunge (43% chance each)\n\n";
+            std::cout << "Press enter to return to bestiary menu...";
+            Helper::PauseConsoleWindow();
+            break;
+        case 5:
+            run = false;
+            break;
+        }
+    }
 }
 

@@ -2,11 +2,18 @@
 #include <string>
 #include "Position.h"
 
+enum class EntityType
+{
+	Empty,
+	Player,
+	Enemy
+};
+
 class Tile
 {
 public:
 
-	Tile(int x, int y, std::string type) :
+	Tile(int x, int y, EntityType type) :
 		_entityType(type)
 	{
 		_pos._xpos = x;
@@ -17,15 +24,15 @@ public:
 
 	//Getters
 	Position Pos() const;
-	std::string EntityType() const;
+	EntityType GetEntityType() const;
 
 
 	//setters
 	void Pos(int x, int y);
-	void EntityType(std::string type);
+	void SetEntityType(EntityType type);
 
 private:
 	Position _pos;
-	std::string _entityType;
+	EntityType _entityType;
 };
 
