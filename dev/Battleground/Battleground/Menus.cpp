@@ -30,8 +30,8 @@ void Menus::MainMenu(GameMap* map)
                                                  \_/__/                                                                                                                                                      
 )";
         std::cout << "\033[0m";
-        std::cout << "1. Begin Game\n2. Settings\n3. Help\n4. Exit\n\nEnter Menu Option: ";
-        menuChoice = Helper::GetMenuChoice(1, 4);
+        std::cout << "1. Begin Game\n2. Settings\n3. Help\n4. Bestiary\n5. Exit\n\nEnter Menu Option: ";
+        menuChoice = Helper::GetMenuChoice(1, 5);
 
         switch (menuChoice)
         {
@@ -54,6 +54,9 @@ void Menus::MainMenu(GameMap* map)
             HelpMenu();
             break;
         case 4: //Exit game
+            BestiaryMenu();
+            break;
+        case 5:
             run = false;
             break;
         }
@@ -343,5 +346,63 @@ void Menus::PowerUpMenu(GameMap* map)
     }
 
     Helper::ClearConsoleWindow();
+}
+
+void Menus::BestiaryMenu()
+{
+    bool run = true;
+    Enemy enemy = Enemy(0, 0, 0, 0, EnemyType::Error);
+    int menuChoice = 0;
+    while (run)
+    {
+        Helper::ClearConsoleWindow();
+        std::cout << R"(
+ ____                    __                                     
+/\  _`\                 /\ \__  __                              
+\ \ \L\ \     __    ____\ \ ,_\/\_\     __     _ __   __  __    
+ \ \  _ <'  /'__`\ /',__\\ \ \/\/\ \  /'__`\  /\`'__\/\ \/\ \   
+  \ \ \L\ \/\  __//\__, `\\ \ \_\ \ \/\ \L\.\_\ \ \/ \ \ \_\ \  
+   \ \____/\ \____\/\____/ \ \__\\ \_\ \__/.\_\\ \_\  \/`____ \ 
+    \/___/  \/____/\/___/   \/__/ \/_/\/__/\/_/ \/_/   `/___/> \
+                                                          /\___/
+                                                          \/__/ 
+)";
+
+
+        std::cout << "\n\n1. Wizard Shroom\n2. Skeleton\n3. Hippie\n4. Exit\n\n";
+        std::cout << "Enter Menu Option: ";
+        menuChoice = Helper::GetMenuChoice(1, 4);
+        Helper::ClearConsoleWindow();
+        switch (menuChoice)
+        {
+        case 1:
+            enemy.SetEnemyType(EnemyType::WizardShroom);
+            enemy.PrintEnemy();
+            std::cout << "\n=======================================================\n";
+            std::cout << "WIZARD SHROOM\nHealth: 5\nAttack: 5\nAttack Preference: Lunge\n\n";
+            std::cout << "Press enter to return to bestiary menu...";
+            Helper::PauseConsoleWindow();
+            break;
+        case 2:
+            enemy.SetEnemyType(EnemyType::Skeleton);
+            enemy.PrintEnemy();
+            std::cout << "\n=======================================================\n";
+            std::cout << "SKELETON\nHealth: 10\nAttack: 3\nAttack Preference: Lunge and Block\n\n";
+            std::cout << "Press enter to return to bestiary menu...";
+            Helper::PauseConsoleWindow();
+            break;
+        case 3:
+            enemy.SetEnemyType(EnemyType::Hippie);
+            enemy.PrintEnemy();
+            std::cout << "\n=======================================================\n";
+            std::cout << "HIPPIE\nHealth: 25\nAttack: 1\nAttack Preference: Dash\n\n";
+            std::cout << "Press enter to return to bestiary menu...";
+            Helper::PauseConsoleWindow();
+            break;
+        case 4:
+            run = false;
+            break;
+        }
+    }
 }
 

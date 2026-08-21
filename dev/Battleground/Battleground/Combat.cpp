@@ -126,7 +126,15 @@ int Combat::CalculateBlock(int userChoice, int enemyChoice, GameMap* map, int en
         break;
     case 1:
         map->MapPlayer()->Health(map->MapPlayer()->Health() - map->Enemies()[enemy]->Attack());
-        map->Enemies()[enemy]->Health(map->Enemies()[enemy]->Health() - 1);
+        
+        for (auto& i : map->MapPlayer()->Powers())
+        {
+            if (i.GetPower() == Power::BlockDamage)
+            {
+                map->Enemies()[enemy]->Health(map->Enemies()[enemy]->Health() - 1);
+                break;
+            }
+        }             
         damage = map->Enemies()[enemy]->Attack();
         break;
     }

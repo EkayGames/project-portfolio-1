@@ -13,6 +13,7 @@ public:
 	static void NextFloorScreen();
 	static void HelpMenu();
 	static void PowerUpMenu(GameMap* map);
+	static void BestiaryMenu();
 
 private:
 	

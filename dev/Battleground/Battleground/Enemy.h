@@ -24,6 +24,8 @@ public:
 
     void PrintEnemy();
 
+    void SetEnemyType(EnemyType type);
+
     EnemyType GetEnemyType() const;
 
 private:

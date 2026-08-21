@@ -100,6 +100,11 @@ void Enemy::PrintEnemy()
         break;
     }
 }
+void Enemy::SetEnemyType(EnemyType type)
+{
+    _enemyType = type;
+}
+
 //Getter for enemy type
 EnemyType Enemy::GetEnemyType() const
 {
