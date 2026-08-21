@@ -52,6 +52,10 @@ void Powerup::PrintPower()
         break;
     case Power::DashDamage:
         std::cout << "Dash does half damage on tie\n";
+        break;
+    case Power::HealRate:
+        std::cout << "+1 Health healed at end of floor\n";
+        break;
     }
 }
 

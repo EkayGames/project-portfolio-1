@@ -55,6 +55,9 @@ void Player::ApplyPower(Power pow)
     case Power::DamageUp:
         Attack(Attack() + 1);
         break;
+    case Power::HealRate:
+        _healRate++;
+        break;
     case Power::LungeDamage:
         _powers.push_back(Power::LungeDamage);
         break;
@@ -72,9 +75,19 @@ void Player::MaxHealth(int max)
     _maxHealth = max;
 }
 
+void Player::HealRate(int heal)
+{
+    _healRate = heal;
+}
+
 int Player::MaxHealth() const
 {
     return _maxHealth;
+}
+
+int Player::HealRate() const
+{
+    return _healRate;
 }
 
 const std::vector<Power>& Player::Powers() const

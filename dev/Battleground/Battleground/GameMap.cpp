@@ -104,6 +104,10 @@ int GameMap::GenerateEnemy(std::vector<int>& usedTiles)
 		attack = 1;
 		health = 25;
 		break;
+	case EnemyType::Unicorn:
+		attack = 2;
+		health = 12;
+		break;
 	}
 
 		Enemy* newEnemy = new Enemy(health, attack, _tiles[enemyTile]->Pos(), randType);

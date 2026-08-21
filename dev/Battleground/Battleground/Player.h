@@ -17,12 +17,15 @@ public:
     void ApplyPower(Power pow);
 
     void MaxHealth(int max);
+    void HealRate(int heal);
 
     int MaxHealth() const;
+    int HealRate() const;
     const std::vector<Power>& Powers() const;
 
 private:
     int _maxHealth = 10;
     std::vector<Power> _powers;
+    int _healRate = 5;
 };
 

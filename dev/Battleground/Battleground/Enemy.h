@@ -8,6 +8,7 @@ enum class EnemyType
     WizardShroom,
     Skeleton,
     Hippie,
+    Unicorn,
     LAST
 };
 

@@ -11,6 +11,7 @@ enum class Power
 	LungeDamage,
 	BlockDamage,
 	DashDamage,
+	HealRate,
 	Count,
 };
 

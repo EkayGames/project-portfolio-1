@@ -223,6 +223,9 @@ void Menus::CombatMenu(GameMap* map, int enemy)
     case EnemyType::Hippie:
         enemyName = "Hippie";
         break;
+    case EnemyType::Unicorn:
+        enemyName = "Unicorn";
+        break;
     }
     bool doCombat = true;
     int combatChoice = 0;
@@ -290,7 +293,8 @@ void Menus::HelpMenu()
     Helper::ClearConsoleWindow();
     std::cout << "Instructions\n===============\nDefeat all enemies on the map to move to the next one!\n";
     std::cout << "Enter W A S D to move around the map and reach enemies!\n";
-    std::cout << "Lunge beats block, block beats dash, and dash beats lunge!\n\nPress any button to return to the main menu...";
+    std::cout << "Lunge beats block, block beats dash, and dash beats lunge!\nFor the best experience, expand the window vertically a bit.\n\n";
+    std::cout << "Press enter to return to main menu...";
 
     Helper::PauseConsoleWindow();
     Helper::ClearConsoleWindow();
@@ -321,7 +325,7 @@ void Menus::PowerUpMenu(GameMap* map)
         pow3->RerollDuplicates(pow1, pow2, map->MapPlayer());
     }
 
-    map->MapPlayer()->Health(map->MapPlayer()->Health() + 5); //Heal 5 health
+    map->MapPlayer()->Health(map->MapPlayer()->Health() + map->MapPlayer()->HealRate()); //Heal health
     if (map->MapPlayer()->Health() > map->MapPlayer()->MaxHealth()) //If player health goes higher than max health, set health to max health
     {
         map->MapPlayer()->Health(map->MapPlayer()->MaxHealth());
@@ -375,10 +379,11 @@ void Menus::BestiaryMenu()
                                                           \/__/ 
 )";
 
-
-        std::cout << "\n\n1. Wizard Shroom\n2. Skeleton\n3. Hippie\n4. Exit\n\n";
+        std::cout << "\n\nWelome to the Bestiary!\nHere you can see the stats of all enemies in the game, including the chance of them using their preferred attack pattern!\n";
+        std::cout << "You can't see their odds of using other attacks though...that's secret!";
+        std::cout << "\n\n1. Wizard Shroom\n2. Skeleton\n3. Hippie\n4. Unicorn\n5. Exit\n\n";
         std::cout << "Enter Menu Option: ";
-        menuChoice = Helper::GetMenuChoice(1, 4);
+        menuChoice = Helper::GetMenuChoice(1, 5);
         Helper::ClearConsoleWindow();
         switch (menuChoice)
         {
@@ -386,7 +391,7 @@ void Menus::BestiaryMenu()
             enemy.SetEnemyType(EnemyType::WizardShroom);
             enemy.PrintEnemy();
             std::cout << "\n=======================================================\n";
-            std::cout << "WIZARD SHROOM\nHealth: 5\nAttack: 5\nAttack Preference: Lunge\n\n";
+            std::cout << "WIZARD SHROOM\nHealth: 5\nAttack: 5\nAttack Preference: Lunge (60% chance)\n\n";
             std::cout << "Press enter to return to bestiary menu...";
             Helper::PauseConsoleWindow();
             break;
@@ -394,7 +399,7 @@ void Menus::BestiaryMenu()
             enemy.SetEnemyType(EnemyType::Skeleton);
             enemy.PrintEnemy();
             std::cout << "\n=======================================================\n";
-            std::cout << "SKELETON\nHealth: 10\nAttack: 3\nAttack Preference: Lunge and Block\n\n";
+            std::cout << "SKELETON\nHealth: 10\nAttack: 3\nAttack Preference: Lunge and Block (40% chance each)\n\n";
             std::cout << "Press enter to return to bestiary menu...";
             Helper::PauseConsoleWindow();
             break;
@@ -402,11 +407,19 @@ void Menus::BestiaryMenu()
             enemy.SetEnemyType(EnemyType::Hippie);
             enemy.PrintEnemy();
             std::cout << "\n=======================================================\n";
-            std::cout << "HIPPIE\nHealth: 25\nAttack: 1\nAttack Preference: Dash\n\n";
+            std::cout << "HIPPIE\nHealth: 25\nAttack: 1\nAttack Preference: Dash (66% chance)\n\n";
             std::cout << "Press enter to return to bestiary menu...";
             Helper::PauseConsoleWindow();
             break;
         case 4:
+            enemy.SetEnemyType(EnemyType::Unicorn);
+            enemy.PrintEnemy();
+            std::cout << "\n=======================================================\n";
+            std::cout << "UNICORN\nHealth: 12\nAttack: 2\nAttack Preference: Dash and Lunge (43% chance each)\n\n";
+            std::cout << "Press enter to return to bestiary menu...";
+            Helper::PauseConsoleWindow();
+            break;
+        case 5:
             run = false;
             break;
         }
