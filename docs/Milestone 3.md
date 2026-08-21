@@ -14,8 +14,11 @@
 - tested if powerup menu displays text properly
 - tested if powerups roll no duplicates
 - tested if powerups apply changes to player object
+- Tested enemy behavior odds
 ## Challenges
 - Enemies were occasionally not being removed from the map upon beating them
 - Changing names caused an infinite loop which made the powerup menu blank
 - Had an error where an extra enemy was generated 
 ## Next Steps
+- Improve visuals and make game look cleaner
+- (optional) scale enemy health and possibly attack

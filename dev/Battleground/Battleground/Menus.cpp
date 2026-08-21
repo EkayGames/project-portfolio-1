@@ -112,7 +112,7 @@ void Menus::MapMenu(GameMap* map)
 
     while (run)
     {
-        std::cout << "Input W A S or D to move up left down or right.\n";
+        std::cout << "Input W A S or D to move up left down or right. Input E to exit to menu.\n";
 
         bool doInput = true;
         while (doInput)
@@ -122,7 +122,7 @@ void Menus::MapMenu(GameMap* map)
             //Get user input for direction
             if (userInput.size() != 1)
             {
-                std::cout << "Invalid input. Please use W A S or D: ";
+                std::cout << "Invalid input. Please use W A S D or E: ";
             }
             else
             {
@@ -169,8 +169,14 @@ void Menus::MapMenu(GameMap* map)
                     doInput = false;
 
                     break;
+                case 'e':
+                case 'E':
+                    Helper::ClearConsoleWindow();
+                    map->GameReset();
+                    return;
+                    break;
                 default:
-                    std::cout << "Invalid input. Please use W A S or D: ";
+                    std::cout << "Invalid input. Please use W A S D or E: ";
                 }
             }
             
