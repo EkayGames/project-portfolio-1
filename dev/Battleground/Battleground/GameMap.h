@@ -21,6 +21,7 @@ public:
 	int EnemyCount() const;
 	Player* MapPlayer() const;
 	std::vector<Enemy*>& Enemies();
+	std::vector<Tile*> Tiles() const;
 
 
 	// Setters

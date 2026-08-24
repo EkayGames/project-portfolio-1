@@ -177,6 +177,11 @@ std::vector<Enemy*>& GameMap::Enemies()
 	return _enemies;
 }
 
+std::vector<Tile*> GameMap::Tiles() const
+{
+	return _tiles;
+}
+
 //Setters
 
 void GameMap::X(int x)

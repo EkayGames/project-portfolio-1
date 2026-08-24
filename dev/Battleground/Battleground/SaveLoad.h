@@ -1,0 +1,13 @@
+#pragma once
+#include "GameMap.h"
+#include <fstream>
+#include <iostream>
+class SaveLoad
+{
+	static void PlayerSave(Player* player);
+	static void MapSave(GameMap* map);
+	static void EnemySave(Enemy* enemy, std::ofstream& outFile);
+	static void TileSave(Tile* tile, std::ofstream& outFile);
+
+};
+
