@@ -13,7 +13,7 @@ void SaveLoad::PlayerSave(Player* player)
 
 	int powersSize = player->Powers().size();
 
-	std::ofstream outFile("player.bin", std::ios::binary);
+	std::ofstream outFile("player.bin", std::ios::binary | std::ios::trunc);
 
 
 	if (outFile.is_open())
@@ -44,7 +44,7 @@ void SaveLoad::MapSave(GameMap* map)
 	int enemyCount = map->EnemyCount();
 	int numTiles = map->Tiles().size();
 
-	std::ofstream outFile("map.bin", std::ios::binary);
+	std::ofstream outFile("map.bin", std::ios::binary | std::ios::trunc);
 
 	if (outFile.is_open())
 	{
@@ -93,4 +93,114 @@ void SaveLoad::TileSave(Tile* tile, std::ofstream& outFile)
 	outFile.write(reinterpret_cast<const char*>(&y), sizeof(y));
 	outFile.write(reinterpret_cast<const char*>(&type), sizeof(type));
 
+}
+
+Player* SaveLoad::PlayerLoad()
+{
+
+	int health = 0;
+	int attack = 0;
+	int x = 0;
+	int y = 0;
+	int maxHealth = 0;
+	int healRate = 0;
+
+	Player* player = new Player(0,0);
+
+	Power power;
+
+	int powerSize = 0;
+
+	std::ifstream inFile("player.bin", std::ios::binary);
+
+	if (inFile.is_open())
+	{
+		inFile.read(reinterpret_cast<char*>(&health), sizeof(health));
+		inFile.read(reinterpret_cast<char*>(&attack), sizeof(attack));
+		inFile.read(reinterpret_cast<char*>(&x), sizeof(x));
+		inFile.read(reinterpret_cast<char*>(&y), sizeof(y));
+		inFile.read(reinterpret_cast<char*>(&maxHealth), sizeof(maxHealth));
+		inFile.read(reinterpret_cast<char*>(&healRate), sizeof(healRate));
+
+		inFile.read(reinterpret_cast<char*>(&powerSize), sizeof(powerSize));
+
+		player = new Player(health, attack, x, y, maxHealth, healRate);
+
+		if (powerSize != 0)
+		{
+			for (int i = 0; i < powerSize; i++)
+			{
+				inFile.read(reinterpret_cast<char*>(&power), sizeof(power));
+				player->ApplyPower(power);
+			}
+		}
+
+		inFile.close();
+	}
+	else std::cout << "ERROR: FAILED TO OPEN FILE TO LOAD";
+
+
+	return player;
+}
+
+void SaveLoad::MapLoad(GameMap* map)
+{
+	int x = 0;
+	int y = 0;
+	int enemyCount = 0;
+	int tileCount = 0;
+
+	std::ifstream inFile("map.bin", std::ios::binary);
+
+	if (inFile.is_open())
+	{
+		inFile.read(reinterpret_cast<char*>(&x), sizeof(x));
+		inFile.read(reinterpret_cast<char*>(&y), sizeof(y));
+		inFile.read(reinterpret_cast<char*>(&enemyCount), sizeof(enemyCount));
+		inFile.read(reinterpret_cast<char*>(&tileCount), sizeof(tileCount));
+
+		for (int i = 0; i < enemyCount; i++)
+		{
+			EnemyLoad(map, inFile);
+		}
+
+		for (int i = 0; i < tileCount; i++)
+		{
+			TileLoad(map, inFile);
+		}
+	}
+	else std::cout << "ERROR: FAILED TO OPEN FILE TO LOAD";
+}
+
+void SaveLoad::EnemyLoad(GameMap* map, std::ifstream& inFile)
+{
+	int health = 0;
+	int attack = 0;
+	int x = 0;
+	int y = 0;
+	EnemyType type;
+
+	inFile.read(reinterpret_cast<char*>(&health), sizeof(health));
+	inFile.read(reinterpret_cast<char*>(&attack), sizeof(attack));
+	inFile.read(reinterpret_cast<char*>(&x), sizeof(x));
+	inFile.read(reinterpret_cast<char*>(&y), sizeof(y));
+	inFile.read(reinterpret_cast<char*>(&type), sizeof(type));
+
+	Enemy* enemy = new Enemy(health, attack, x, y, type);
+	map->Enemies().push_back(enemy);
+
+}
+
+void SaveLoad::TileLoad(GameMap* map, std::ifstream& inFile)
+{
+	int x = 0;
+	int y = 0;
+	EntityType type;
+
+	inFile.read(reinterpret_cast<char*>(&x), sizeof(x));
+	inFile.read(reinterpret_cast<char*>(&y), sizeof(y));
+	inFile.read(reinterpret_cast<char*>(&type), sizeof(type));
+
+	Tile* tile = new Tile(x, y, type);
+	map->Tiles().push_back(tile);
 }
