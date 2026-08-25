@@ -36,11 +36,12 @@ void SaveLoad::PlayerSave(Player* player)
 	}
 	else std::cout << "ERROR: FAILED TO OPEN FILE TO SAVE";
 }
-//map x, map y, num enemies, num tiles, enemies, tiles,
+//map x, map y, current enemies, num enemies, num tiles, enemies, tiles,
 void SaveLoad::MapSave(GameMap* map)
 {
 	int x = map->X();
 	int y = map->Y();
+	int currentEnemies = map->Enemies().size();
 	int enemyCount = map->EnemyCount();
 	int numTiles = map->Tiles().size();
 
@@ -50,6 +51,7 @@ void SaveLoad::MapSave(GameMap* map)
 	{
 		outFile.write(reinterpret_cast<const char*>(&x), sizeof(x));
 		outFile.write(reinterpret_cast<const char*>(&y), sizeof(y));
+		outFile.write(reinterpret_cast<const char*>(&currentEnemies), sizeof(currentEnemies));
 		outFile.write(reinterpret_cast<const char*>(&enemyCount), sizeof(enemyCount));
 		outFile.write(reinterpret_cast<const char*>(&numTiles), sizeof(numTiles));
 
@@ -145,10 +147,16 @@ Player* SaveLoad::PlayerLoad()
 
 void SaveLoad::MapLoad(GameMap* map)
 {
+	map->Enemies().clear();
+	map->Tiles().clear();
+
+
 	int x = 0;
 	int y = 0;
+	int currentEnemies = 0;
 	int enemyCount = 0;
 	int tileCount = 0;
+
 
 	std::ifstream inFile("map.bin", std::ios::binary);
 
@@ -156,10 +164,16 @@ void SaveLoad::MapLoad(GameMap* map)
 	{
 		inFile.read(reinterpret_cast<char*>(&x), sizeof(x));
 		inFile.read(reinterpret_cast<char*>(&y), sizeof(y));
+		inFile.read(reinterpret_cast<char*>(&currentEnemies), sizeof(currentEnemies));
 		inFile.read(reinterpret_cast<char*>(&enemyCount), sizeof(enemyCount));
 		inFile.read(reinterpret_cast<char*>(&tileCount), sizeof(tileCount));
 
-		for (int i = 0; i < enemyCount; i++)
+		map->X(x);
+		map->Y(y);
+		map->EnemyCount(enemyCount);
+
+
+		for (int i = 0; i < currentEnemies; i++)
 		{
 			EnemyLoad(map, inFile);
 		}
@@ -168,6 +182,8 @@ void SaveLoad::MapLoad(GameMap* map)
 		{
 			TileLoad(map, inFile);
 		}
+
+		inFile.close();
 	}
 	else std::cout << "ERROR: FAILED TO OPEN FILE TO LOAD";
 }
@@ -203,4 +219,34 @@ void SaveLoad::TileLoad(GameMap* map, std::ifstream& inFile)
 
 	Tile* tile = new Tile(x, y, type);
 	map->Tiles().push_back(tile);
+}
+
+void SaveLoad::WipeSaves()
+{
+	std::ofstream outFile("player.bin", std::ios::binary | std::ios::trunc);
+	outFile.close();
+
+	std::ofstream outFile2("map.bin", std::ios::binary | std::ios::trunc);
+	outFile2.close();
+}
+
+bool SaveLoad::ValidateSave()
+{
+	bool saveExists;
+
+	std::ifstream inFile("map.bin", std::ios::binary);
+	std::ifstream inFile2("player.bin", std::ios::binary);
+
+	if (inFile.is_open() && inFile2.is_open())
+	{
+		if (inFile.peek() != std::ifstream::traits_type::eof() &&
+			inFile2.peek() != std::ifstream::traits_type::eof())
+		{
+			saveExists = true;
+		}
+		else saveExists = false;
+	}
+	else saveExists = false;
+
+	return saveExists;
 }

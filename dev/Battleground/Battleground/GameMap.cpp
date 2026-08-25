@@ -177,7 +177,7 @@ std::vector<Enemy*>& GameMap::Enemies()
 	return _enemies;
 }
 
-std::vector<Tile*> GameMap::Tiles() const
+std::vector<Tile*>& GameMap::Tiles()
 {
 	return _tiles;
 }

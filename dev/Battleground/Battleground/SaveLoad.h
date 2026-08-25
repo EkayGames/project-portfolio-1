@@ -4,6 +4,7 @@
 #include <iostream>
 class SaveLoad
 {
+public:
 	static void PlayerSave(Player* player);
 	static void MapSave(GameMap* map);
 	static void EnemySave(Enemy* enemy, std::ofstream& outFile);
@@ -12,6 +13,9 @@ class SaveLoad
 	static void MapLoad(GameMap* map);
 	static void EnemyLoad(GameMap* map, std::ifstream& inFile);
 	static void TileLoad(GameMap* map, std::ifstream& inFile);
+	static void WipeSaves();
+	static bool ValidateSave();
+private:
 
 };
 

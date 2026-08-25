@@ -30,8 +30,8 @@ void Menus::MainMenu(GameMap* map)
                                                  \_/__/                                                                                                                                                      
 )";
         std::cout << "\033[0m";
-        std::cout << "1. Begin Game\n2. Settings\n3. Help\n4. Bestiary\n5. Exit\n\nEnter Menu Option: ";
-        menuChoice = Helper::GetMenuChoice(1, 5);
+        std::cout << "1. Begin Game\n2. Continue Game\n3. Settings\n4. Help\n5. Bestiary\n6. Exit\n\nEnter Menu Option: ";
+        menuChoice = Helper::GetMenuChoice(1, 6);
 
         switch (menuChoice)
         {
@@ -40,6 +40,10 @@ void Menus::MainMenu(GameMap* map)
 
             if (map->EnemyCount() < (map->X() * map->Y()) - 1)
             {
+                map->MapPlayer(new Player(10, 5));
+                map->GenerateMap();
+                SaveLoad::WipeSaves();
+
                 MapMenu(map);
             }
             else
@@ -47,16 +51,32 @@ void Menus::MainMenu(GameMap* map)
                 std::cout << "Error. Enemy count larger than free tile amount.";
             }
             break;
-        case 2: //Settings menu
+        case 2: //Continue game
+            if (SaveLoad::ValidateSave())
+            {
+                SaveLoad::MapLoad(map);
+                map->MapPlayer(SaveLoad::PlayerLoad());
+                Helper::ClearConsoleWindow();
+                MapMenu(map);
+            }
+            else
+            {
+                Helper::ClearConsoleWindow();
+                std::cout << "No save data found.\nPress enter to continue...";
+                Helper::PauseConsoleWindow();
+                Helper::ClearConsoleWindow();
+            }
+            break;
+        case 3: //Settings menu
             SettingsMenu(map);
             break;
-        case 3:
+        case 4: //help menu
             HelpMenu();
             break;
-        case 4: //Exit game
+        case 5: //Bestiary
             BestiaryMenu();
             break;
-        case 5:
+        case 6: //Exit
             run = false;
             break;
         }
@@ -105,8 +125,7 @@ void Menus::SettingsMenu(GameMap* map)
 void Menus::MapMenu(GameMap* map)
 {
     bool run = true;
-    map->MapPlayer(new Player(10, 5));
-    map->GenerateMap();
+
     map->PrintMap();
     std::string userInput;
 
@@ -172,7 +191,8 @@ void Menus::MapMenu(GameMap* map)
                 case 'e':
                 case 'E':
                     Helper::ClearConsoleWindow();
-                    map->GameReset();
+                    SaveLoad::MapSave(map);
+                    SaveLoad::PlayerSave(map->MapPlayer());
                     return;
                     break;
                 default:
@@ -201,6 +221,7 @@ void Menus::MapMenu(GameMap* map)
         if (map->MapPlayer()->Health() <= 0)
         {
             map->GameReset();
+            SaveLoad::WipeSaves();
             return;
         }
         
