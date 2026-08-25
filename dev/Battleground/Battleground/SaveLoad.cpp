@@ -250,3 +250,43 @@ bool SaveLoad::ValidateSave()
 
 	return saveExists;
 }
+
+void SaveLoad::SettingsSave(GameMap* map)
+{
+	int x = map->X();
+	int y = map->Y();
+	int enemyCount = map->EnemyCount();
+
+	std::ofstream outFile("settings.bin", std::ios::binary | std::ios::trunc);
+
+	if (outFile.is_open())
+	{
+		outFile.write(reinterpret_cast<const char*>(&x), sizeof(x));
+		outFile.write(reinterpret_cast<const char*>(&y), sizeof(y));
+		outFile.write(reinterpret_cast<const char*>(&enemyCount), sizeof(enemyCount));
+
+		outFile.close();
+	}
+	else std::cout << "ERROR: FAILED TO OPEN FILE TO SAVE";
+
+}
+
+void SaveLoad::SettingsLoad(GameMap* map)
+{
+	int x = 0;
+	int y = 0;
+	int enemyCount = 0;
+
+	std::ifstream inFile("settings.bin", std::ios::binary);
+
+	if (inFile.is_open())
+	{
+		inFile.read(reinterpret_cast<char*>(&x), sizeof(x));
+		inFile.read(reinterpret_cast<char*>(&y), sizeof(y));
+		inFile.read(reinterpret_cast<char*>(&enemyCount), sizeof(enemyCount));
+
+		map->X(x);
+		map->Y(y);
+		map->EnemyCount(enemyCount);
+	}
+}

@@ -15,6 +15,8 @@ public:
 	static void TileLoad(GameMap* map, std::ifstream& inFile);
 	static void WipeSaves();
 	static bool ValidateSave();
+	static void SettingsSave(GameMap* map);
+	static void SettingsLoad(GameMap* map);
 private:
 
 };

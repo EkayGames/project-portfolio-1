@@ -16,6 +16,7 @@ void Menus::MainMenu(GameMap* map)
 {
     bool run = true;
     int menuChoice = 0;
+    SaveLoad::SettingsLoad(map);
     while (run)
     {
         std::cout << "\033[34m" << R"(
@@ -91,7 +92,18 @@ void Menus::SettingsMenu(GameMap* map)
 
     while (run)
     {
-        std::cout << "SETTINGS\n";
+        std::cout << R"(
+ ____    ____    ______  ______  ______   __  __  ____    ____       
+/\  _`\ /\  _`\ /\__  _\/\__  _\/\__  _\ /\ \/\ \/\  _`\ /\  _`\     
+\ \,\L\_\ \ \L\_\/_/\ \/\/_/\ \/\/_/\ \/ \ \ `\\ \ \ \L\_\ \,\L\_\   
+ \/_\__ \\ \  _\L  \ \ \   \ \ \   \ \ \  \ \ , ` \ \ \L_L\/_\__ \   
+   /\ \L\ \ \ \L\ \ \ \ \   \ \ \   \_\ \__\ \ \`\ \ \ \/, \/\ \L\ \ 
+   \ `\____\ \____/  \ \_\   \ \_\  /\_____\\ \_\ \_\ \____/\ `\____\
+    \/_____/\/___/    \/_/    \/_/  \/_____/ \/_/\/_/\/___/  \/_____/                                                                                                                                         
+)";
+
+        std::cout << "\nCurrent map size: " << map->X() << "x" << map->Y() << "\n";
+        std::cout << "Current enemy count: " << map->EnemyCount() << "\n";
         std::cout << "1. Map Size\n2. Enemy Count\n3. Exit\n\n Enter Menu Option: ";
         menuChoice = Helper::GetMenuChoice(1, 3);
 
@@ -105,6 +117,7 @@ void Menus::SettingsMenu(GameMap* map)
 
             Helper::ClearConsoleWindow();
             std::cout << "Map size changed.\n\n";
+            SaveLoad::SettingsSave(map);
 
             break;
         case 2: //Prompt user to change amount of enemies
@@ -113,6 +126,7 @@ void Menus::SettingsMenu(GameMap* map)
 
             Helper::ClearConsoleWindow();
             std::cout << "Enemy count changed.\n\n";
+            SaveLoad::SettingsSave(map);
             break;
         case 3: //Exit settings menu back to main
             Helper::ClearConsoleWindow();
@@ -131,7 +145,7 @@ void Menus::MapMenu(GameMap* map)
 
     while (run)
     {
-        std::cout << "Input W A S or D to move up left down or right. Input E to exit to menu.\n";
+        std::cout << "Input W A S or D to move up left down or right. Input E to save and exit to menu.\n";
 
         bool doInput = true;
         while (doInput)
@@ -318,7 +332,16 @@ void Menus::NextFloorScreen()
 void Menus::HelpMenu()
 {
     Helper::ClearConsoleWindow();
-    std::cout << "Instructions\n===============\nDefeat all enemies on the map to move to the next one!\n";
+    std::cout << R"(
+ ______   __  __  ____    ______  ____    __  __  ____    ______  ______   _____   __  __  ____       
+/\__  _\ /\ \/\ \/\  _`\ /\__  _\/\  _`\ /\ \/\ \/\  _`\ /\__  _\/\__  _\ /\  __`\/\ \/\ \/\  _`\     
+\/_/\ \/ \ \ `\\ \ \,\L\_\/_/\ \/\ \ \L\ \ \ \ \ \ \ \/\_\/_/\ \/\/_/\ \/ \ \ \/\ \ \ `\\ \ \,\L\_\   
+   \ \ \  \ \ , ` \/_\__ \  \ \ \ \ \ ,  /\ \ \ \ \ \ \/_/_ \ \ \   \ \ \  \ \ \ \ \ \ , ` \/_\__ \   
+    \_\ \__\ \ \`\ \/\ \L\ \ \ \ \ \ \ \\ \\ \ \_\ \ \ \L\ \ \ \ \   \_\ \__\ \ \_\ \ \ \`\ \/\ \L\ \ 
+    /\_____\\ \_\ \_\ `\____\ \ \_\ \ \_\ \_\ \_____\ \____/  \ \_\  /\_____\\ \_____\ \_\ \_\ `\____\
+    \/_____/ \/_/\/_/\/_____/  \/_/  \/_/\/ /\/_____/\/___/    \/_/  \/_____/ \/_____/\/_/\/_/\/_____/                                                                                                                                                                                                        
+)"
+    std::cout << "\nDefeat all enemies on the map to move to the next one!\n";
     std::cout << "Enter W A S D to move around the map and reach enemies!\n";
     std::cout << "Lunge beats block, block beats dash, and dash beats lunge!\nFor the best experience, expand the window vertically a bit.\n\n";
     std::cout << "Press enter to return to main menu...";
