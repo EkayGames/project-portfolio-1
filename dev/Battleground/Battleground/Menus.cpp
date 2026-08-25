@@ -282,8 +282,10 @@ void Menus::CombatMenu(GameMap* map, int enemy)
         {
             Combat::PrintBattleText(combatChoice, enemyCombatChoice, enemyName, damage, map);
         }
-        std::cout << "\nEnemy health: " << map->Enemies()[enemy]->Health() << "\n";
-        std::cout << "Your health: " << map->MapPlayer()->Health() << "/" <<  map->MapPlayer()->MaxHealth() << "\n\n";
+        Helper::PrintTextOfColor("\nEnemy Health: ", Color::RED);
+        std::cout << map->Enemies()[enemy]->Health() << "\n";
+        Helper::PrintTextOfColor("Your Health: ", Color::BLUE);
+        std::cout << map->MapPlayer()->Health() << "/" <<  map->MapPlayer()->MaxHealth() << "\n\n";
 
         if (map->Enemies()[enemy]->Health() > 0 && map->MapPlayer()->Health() > 0)
         {
