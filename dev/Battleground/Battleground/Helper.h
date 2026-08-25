@@ -4,6 +4,19 @@
 #include <limits>
 #include <string>
 
+enum class Color
+{
+	RED,
+	GREEN,
+	YELLOW,
+	BLUE,
+	MAGENTA,
+	CYAN,
+	DEFAULT,
+};
+
+
+
 namespace Helper
 {
 	//Line
@@ -167,5 +180,41 @@ namespace Helper
 	{
 		bool result = rand() % 2;
 		return result;
+	}
+
+	//Change text color
+	static void ChangeTextColor(Color color)
+	{
+		switch (color)
+		{
+		case Color::RED:
+			std::cout << "\033[31m";
+			break;
+		case Color::GREEN:
+			std::cout << "\033[32m";
+			break;
+		case Color::YELLOW:
+			std::cout << "\033[33m";
+			break;
+		case Color::BLUE:
+			std::cout << "\033[34m";
+			break;
+		case Color::MAGENTA:
+			std::cout << "\033[35m";
+			break;
+		case Color::CYAN:
+			std::cout << "\033[36m";
+			break;
+		case Color::DEFAULT:
+			std::cout << "\033[0m";
+		}
+	}
+
+	//Print text of color
+	static void PrintTextOfColor(std::string text, Color color)
+	{
+		ChangeTextColor(color);
+		std::cout << text;
+		ChangeTextColor(Color::DEFAULT);
 	}
 }

@@ -19,7 +19,8 @@ void Menus::MainMenu(GameMap* map)
     SaveLoad::SettingsLoad(map);
     while (run)
     {
-        std::cout << "\033[34m" << R"(
+        Helper::ChangeTextColor(Color::CYAN);
+        std::cout << R"(
  ____              __    __    ___                                                   __            
 /\  _`\           /\ \__/\ \__/\_ \                                                 /\ \           
 \ \ \L\ \     __  \ \ ,_\ \ ,_\//\ \      __     __   _ __   ___   __  __    ___    \_\ \    ____  
@@ -30,7 +31,7 @@ void Menus::MainMenu(GameMap* map)
                                                  /\____/                                           
                                                  \_/__/                                                                                                                                                      
 )";
-        std::cout << "\033[0m";
+        Helper::ChangeTextColor(Color::DEFAULT);
         std::cout << "1. Begin Game\n2. Continue Game\n3. Settings\n4. Help\n5. Bestiary\n6. Exit\n\nEnter Menu Option: ";
         menuChoice = Helper::GetMenuChoice(1, 6);
 
@@ -332,6 +333,7 @@ void Menus::NextFloorScreen()
 void Menus::HelpMenu()
 {
     Helper::ClearConsoleWindow();
+    Helper::ChangeTextColor(Color::CYAN);
     std::cout << R"(
  ______   __  __  ____    ______  ____    __  __  ____    ______  ______   _____   __  __  ____       
 /\__  _\ /\ \/\ \/\  _`\ /\__  _\/\  _`\ /\ \/\ \/\  _`\ /\__  _\/\__  _\ /\  __`\/\ \/\ \/\  _`\     
@@ -340,12 +342,13 @@ void Menus::HelpMenu()
     \_\ \__\ \ \`\ \/\ \L\ \ \ \ \ \ \ \\ \\ \ \_\ \ \ \L\ \ \ \ \   \_\ \__\ \ \_\ \ \ \`\ \/\ \L\ \ 
     /\_____\\ \_\ \_\ `\____\ \ \_\ \ \_\ \_\ \_____\ \____/  \ \_\  /\_____\\ \_____\ \_\ \_\ `\____\
     \/_____/ \/_/\/_/\/_____/  \/_/  \/_/\/ /\/_____/\/___/    \/_/  \/_____/ \/_____/\/_/\/_/\/_____/                                                                                                                                                                                                        
-)"
+)";
+    Helper::ChangeTextColor(Color::YELLOW);
     std::cout << "\nDefeat all enemies on the map to move to the next one!\n";
     std::cout << "Enter W A S D to move around the map and reach enemies!\n";
     std::cout << "Lunge beats block, block beats dash, and dash beats lunge!\nFor the best experience, expand the window vertically a bit.\n\n";
     std::cout << "Press enter to return to main menu...";
-
+    Helper::ChangeTextColor(Color::DEFAULT);
     Helper::PauseConsoleWindow();
     Helper::ClearConsoleWindow();
 }
