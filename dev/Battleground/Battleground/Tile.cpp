@@ -16,10 +16,14 @@ void Tile::Print() const
         std::cout << "|   |";
         break;
     case EntityType::Player:
-        std::cout << "| P |";
+        std::cout << "|";
+        Helper::PrintText(Color::BLUE, BackgroundColor::WHITE, " P ");
+        std::cout << "|";
         break;
     case EntityType::Enemy:
-        std::cout << "| E |";
+        std::cout << "|";
+        Helper::PrintText(Color::WHITE, BackgroundColor::RED, " E ");
+        std::cout << "|";
         break;
     }
 }

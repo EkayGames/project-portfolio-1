@@ -147,7 +147,8 @@ void Menus::MapMenu(GameMap* map)
 
     while (run)
     {
-        std::cout << "Input W A S or D to move up left down or right. Input E to save and exit to menu.\n";
+        Helper::PrintText(Color::YELLOW, TextType::UNDERLINE, "The red squares are enemies and the white square is you!",
+            "\nInput W A S or D to move up left down or right.\nInput E to save and exit to menu.\n");
 
         bool doInput = true;
         while (doInput)
@@ -278,19 +279,21 @@ void Menus::CombatMenu(GameMap* map, int enemy)
     {
         //Print menu
         map->Enemies()[enemy]->PrintEnemy();
-        std::cout << "\n\n=======================================================\nA " << enemyName << " appears!\n\n";
+        std::cout << "\n\n=======================================================\n";
+        Helper::PrintText(Color::RED, "A ", enemyName, " appears!\n\n");
+
         if (combatChoice != 0 && enemyCombatChoice != 0)
         {
             Combat::PrintBattleText(combatChoice, enemyCombatChoice, enemyName, damage, map);
         }
         std::cout << "\n";
-        Helper::PrintText(Color::RED, BackgroundColor::WHITE, TextType::BOLD, "Enemy Health: ", map->Enemies()[enemy]->Health());
+        Helper::PrintText(Color::WHITE, BackgroundColor::RED, TextType::BOLD, "Enemy Health: ", map->Enemies()[enemy]->Health(), " ");
         std::cout << "\n";
-        Helper::PrintText(Color::BLUE, BackgroundColor::WHITE, TextType::BOLD, "Your health: ", map->MapPlayer()->Health(), "/", map->MapPlayer()->MaxHealth());
+        Helper::PrintText(Color::WHITE, BackgroundColor::BLUE, TextType::BOLD, "Your health: ", map->MapPlayer()->Health(), "/", map->MapPlayer()->MaxHealth(), " ");
         std::cout << "\n\n";
         if (map->Enemies()[enemy]->Health() > 0 && map->MapPlayer()->Health() > 0)
         {
-            std::cout << "1. Lunge\t\t2. Defend\t\t3. Dash\n\nEnter action choice(1 2 or 3): ";
+            Helper::PrintText(Color::YELLOW, "1. Lunge\t\t2. Defend\t\t3. Dash\n\nEnter action choice(1 2 or 3): ");
         }
 
         //Win if enemy health is 0, lose if player health is 0

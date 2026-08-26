@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "Position.h"
+#include "Helper.h"
 
 enum class EntityType
 {
