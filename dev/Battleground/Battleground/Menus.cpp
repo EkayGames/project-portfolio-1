@@ -31,7 +31,7 @@ void Menus::MainMenu(GameMap* map)
                                                  /\____/                                           
                                                  \_/__/                                                                                                                                                      
 )";
-        Helper::ChangeTextColor(Color::DEFAULT);
+        Helper::ResetText();
         std::cout << "1. Begin Game\n2. Continue Game\n3. Settings\n4. Help\n5. Bestiary\n6. Exit\n\nEnter Menu Option: ";
         menuChoice = Helper::GetMenuChoice(1, 6);
 
@@ -42,6 +42,7 @@ void Menus::MainMenu(GameMap* map)
 
             if (map->EnemyCount() < (map->X() * map->Y()) - 1)
             {
+                map->Enemies().clear();
                 map->MapPlayer(new Player(10, 5));
                 map->GenerateMap();
                 SaveLoad::WipeSaves();
@@ -282,11 +283,11 @@ void Menus::CombatMenu(GameMap* map, int enemy)
         {
             Combat::PrintBattleText(combatChoice, enemyCombatChoice, enemyName, damage, map);
         }
-        Helper::PrintTextOfColor("\nEnemy Health: ", Color::RED);
-        std::cout << map->Enemies()[enemy]->Health() << "\n";
-        Helper::PrintTextOfColor("Your Health: ", Color::BLUE);
-        std::cout << map->MapPlayer()->Health() << "/" <<  map->MapPlayer()->MaxHealth() << "\n\n";
-
+        std::cout << "\n";
+        Helper::PrintText(Color::RED, BackgroundColor::WHITE, TextType::BOLD, "Enemy Health: ", map->Enemies()[enemy]->Health());
+        std::cout << "\n";
+        Helper::PrintText(Color::BLUE, BackgroundColor::WHITE, TextType::BOLD, "Your health: ", map->MapPlayer()->Health(), "/", map->MapPlayer()->MaxHealth());
+        std::cout << "\n\n";
         if (map->Enemies()[enemy]->Health() > 0 && map->MapPlayer()->Health() > 0)
         {
             std::cout << "1. Lunge\t\t2. Defend\t\t3. Dash\n\nEnter action choice(1 2 or 3): ";
@@ -350,7 +351,7 @@ void Menus::HelpMenu()
     std::cout << "Enter W A S D to move around the map and reach enemies!\n";
     std::cout << "Lunge beats block, block beats dash, and dash beats lunge!\nFor the best experience, expand the window vertically a bit.\n\n";
     std::cout << "Press enter to return to main menu...";
-    Helper::ChangeTextColor(Color::DEFAULT);
+    Helper::ResetText();
     Helper::PauseConsoleWindow();
     Helper::ClearConsoleWindow();
 }
