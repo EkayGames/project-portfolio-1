@@ -31,13 +31,22 @@ void GameMap::GenerateMap()
 		usedTiles.push_back(newEnemy);
 		_tiles[newEnemy]->SetEntityType(EntityType::Enemy);
 	}
+
+	int extraHealth = _floor - 1;
+
+	for (auto& i : _enemies)
+	{
+		i->Health(i->Health() + extraHealth);
+	}
 }
 
 //print the game map
 void GameMap::PrintMap() 
 {
+
 	int tile = 0;
 	UpdateMap();
+	Helper::PrintText(Color::GREEN, "FLOOR: ", _floor, "\n");
 	for (int i = 0; i < _mapY; i++)
 	{
 		for (int j = 0; j < _mapX; j++) //Print a line of correct length
@@ -87,14 +96,14 @@ int GameMap::GenerateEnemy(std::vector<int>& usedTiles)
 		static_cast<int>(EnemyType::Error) + 1, 
 		static_cast<int>(EnemyType::LAST) - 1));
 
-	int attack;
-	int health;
+	int attack = 0;
+	int health = 0;
 
 	switch (randType)
 	{
 	case EnemyType::WizardShroom:
 		attack = 5;
-		health = 5;
+		health = 1;
 		break;
 	case EnemyType::Skeleton:
 		attack = 3;
@@ -110,8 +119,8 @@ int GameMap::GenerateEnemy(std::vector<int>& usedTiles)
 		break;
 	}
 
-		Enemy* newEnemy = new Enemy(health, attack, _tiles[enemyTile]->Pos(), randType);
-		_enemies.push_back(newEnemy);
+	Enemy* newEnemy = new Enemy(health, attack, _tiles[enemyTile]->Pos(), randType);
+	_enemies.push_back(newEnemy);
 
 
 
@@ -167,6 +176,11 @@ int GameMap::EnemyCount() const
 	return _numEnemies;
 }
 
+int GameMap::Floor() const
+{
+	return _floor;
+}
+
 Player* GameMap::MapPlayer() const
 {
 	return _player;
@@ -175,6 +189,11 @@ Player* GameMap::MapPlayer() const
 std::vector<Enemy*>& GameMap::Enemies()
 {
 	return _enemies;
+}
+
+std::vector<Tile*>& GameMap::Tiles()
+{
+	return _tiles;
 }
 
 //Setters
@@ -197,4 +216,9 @@ void GameMap::MapPlayer(Player* player)
 void GameMap::EnemyCount(int enemies)
 {
 	_numEnemies = enemies;
+}
+
+void GameMap::Floor(int floor)
+{
+	_floor = floor;
 }

@@ -4,8 +4,187 @@
 #include <limits>
 #include <string>
 
+enum class Color
+{
+	RED,
+	GREEN,
+	YELLOW,
+	BLUE,
+	MAGENTA,
+	CYAN,
+	WHITE,
+};
+
+enum class BackgroundColor
+{
+	RED,
+	GREEN,
+	YELLOW,
+	BLUE,
+	MAGENTA,
+	CYAN,
+	WHITE,
+};
+
+enum class TextType
+{
+	BOLD,
+	UNDERLINE,
+	DOUBLEUNDERLINE
+};
+
+
+
 namespace Helper
 {
+	//Reset text colors and type
+	static void ResetText()
+	{
+		std::cout << "\033[0m";
+	}
+
+	//Change text color
+	static void ChangeTextColor(Color color)
+	{
+		switch (color)
+		{
+		case Color::RED:
+			std::cout << "\033[31m";
+			break;
+		case Color::GREEN:
+			std::cout << "\033[32m";
+			break;
+		case Color::YELLOW:
+			std::cout << "\033[33m";
+			break;
+		case Color::BLUE:
+			std::cout << "\033[34m";
+			break;
+		case Color::MAGENTA:
+			std::cout << "\033[35m";
+			break;
+		case Color::CYAN:
+			std::cout << "\033[36m";
+			break;
+		case Color::WHITE:
+			std::cout << "\033[37m";
+			break;
+		}
+	}
+
+	static void ChangeTextBackground(BackgroundColor color)
+	{
+		switch (color)
+		{
+		case BackgroundColor::RED:
+			std::cout << "\033[41m";
+			break;
+		case BackgroundColor::GREEN:
+			std::cout << "\033[42m";
+			break;
+		case BackgroundColor::YELLOW:
+			std::cout << "\033[43m";
+			break;
+		case BackgroundColor::BLUE:
+			std::cout << "\033[44m";
+			break;
+		case BackgroundColor::MAGENTA:
+			std::cout << "\033[45m";
+			break;
+		case BackgroundColor::CYAN:
+			std::cout << "\033[46m";
+			break;
+		case BackgroundColor::WHITE:
+			std::cout << "\033[47m";
+			break;
+		}
+	}
+
+	static void ChangeTextType(TextType type)
+	{
+		switch (type)
+		{
+		case TextType::BOLD:
+			std::cout << "\033[1m";
+			break;
+		case TextType::UNDERLINE:
+			std::cout << "\033[4m";
+			break;
+		case TextType::DOUBLEUNDERLINE:
+			std::cout << "\033[21m";
+			break;
+		}
+	}
+
+
+	//Print text of color
+	template <typename... PrintedText> //Declare template to use for input text in print function
+	static void PrintText(Color color, PrintedText&&... text)
+	{
+		ChangeTextColor(color);
+		(std::cout << ... << text);
+		ResetText();
+	}
+
+	//Print text of backgroundcolor
+	template <typename... PrintedText> //Declare template to use for input text in print function
+	static void PrintText(BackgroundColor background, PrintedText&&... text)
+	{
+		ChangeTextBackground(background);
+		(std::cout << ... << text);
+		ResetText();
+	}
+
+	//Print text of type
+	template <typename... PrintedText> //Declare template to use for input text in print function
+	static void PrintText(TextType type, PrintedText&&... text)
+	{
+		ChangeTextType(type);
+		(std::cout << ... << text);
+		ResetText();
+	}
+
+	//Print text of color with background
+	template <typename... PrintedText> //Declare template to use for input text in print function
+	static void PrintText(Color color, BackgroundColor background, PrintedText&&... text)
+	{
+		ChangeTextColor(color);
+		ChangeTextBackground(background);
+		(std::cout << ... << text);
+		ResetText();
+	}
+
+	//Print text of color with type
+	template <typename... PrintedText> //Declare template to use for input text in print function
+	static void PrintText(Color color, TextType type, PrintedText&&... text)
+	{
+		ChangeTextColor(color);
+		ChangeTextType(type);
+		(std::cout << ... << text);
+		ResetText();
+	}
+
+	//Print text of background with type
+	template <typename... PrintedText> //Declare template to use for input text in print function
+	static void PrintText(BackgroundColor background, TextType type, PrintedText&&... text)
+	{
+		ChangeTextBackground(background);
+		ChangeTextType(type);
+		(std::cout << ... << text);
+		ResetText();
+	}
+
+	//Print text with color background color and type
+	template <typename... PrintedText> //Declare template to use for input text in print function
+	static void PrintText(Color color, BackgroundColor background, TextType type, PrintedText&&... text)
+	{
+		ChangeTextColor(color);
+		ChangeTextBackground(background);
+		ChangeTextType(type);
+		(std::cout << ... << text);
+		ResetText();
+	}
+
 	//Line
 	static void Line()
 	{
@@ -168,4 +347,5 @@ namespace Helper
 		bool result = rand() % 2;
 		return result;
 	}
+
 }

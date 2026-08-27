@@ -7,6 +7,7 @@ class Player :
 {
 public:
 
+    Player(int health, int attack, int x, int y, int maxHealth, int healRate);
     Player(int health, int attack, int x, int y);
     Player(int health, int attack, Position pos);
     Player(int health, int attack);

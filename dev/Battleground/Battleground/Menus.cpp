@@ -16,9 +16,11 @@ void Menus::MainMenu(GameMap* map)
 {
     bool run = true;
     int menuChoice = 0;
+    SaveLoad::SettingsLoad(map);
     while (run)
     {
-        std::cout << "\033[34m" << R"(
+        Helper::ChangeTextColor(Color::CYAN);
+        std::cout << R"(
  ____              __    __    ___                                                   __            
 /\  _`\           /\ \__/\ \__/\_ \                                                 /\ \           
 \ \ \L\ \     __  \ \ ,_\ \ ,_\//\ \      __     __   _ __   ___   __  __    ___    \_\ \    ____  
@@ -29,9 +31,9 @@ void Menus::MainMenu(GameMap* map)
                                                  /\____/                                           
                                                  \_/__/                                                                                                                                                      
 )";
-        std::cout << "\033[0m";
-        std::cout << "1. Begin Game\n2. Settings\n3. Help\n4. Bestiary\n5. Exit\n\nEnter Menu Option: ";
-        menuChoice = Helper::GetMenuChoice(1, 5);
+        Helper::ResetText();
+        std::cout << "1. Begin Game\n2. Continue Game\n3. Settings\n4. Help\n5. Bestiary\n6. Exit\n\nEnter Menu Option: ";
+        menuChoice = Helper::GetMenuChoice(1, 6);
 
         switch (menuChoice)
         {
@@ -40,6 +42,11 @@ void Menus::MainMenu(GameMap* map)
 
             if (map->EnemyCount() < (map->X() * map->Y()) - 1)
             {
+                map->Enemies().clear();
+                map->MapPlayer(new Player(10, 5));
+                map->GenerateMap();
+                SaveLoad::WipeSaves();
+
                 MapMenu(map);
             }
             else
@@ -47,16 +54,32 @@ void Menus::MainMenu(GameMap* map)
                 std::cout << "Error. Enemy count larger than free tile amount.";
             }
             break;
-        case 2: //Settings menu
+        case 2: //Continue game
+            if (SaveLoad::ValidateSave())
+            {
+                SaveLoad::MapLoad(map);
+                map->MapPlayer(SaveLoad::PlayerLoad());
+                Helper::ClearConsoleWindow();
+                MapMenu(map);
+            }
+            else
+            {
+                Helper::ClearConsoleWindow();
+                std::cout << "No save data found.\nPress enter to continue...";
+                Helper::PauseConsoleWindow();
+                Helper::ClearConsoleWindow();
+            }
+            break;
+        case 3: //Settings menu
             SettingsMenu(map);
             break;
-        case 3:
+        case 4: //help menu
             HelpMenu();
             break;
-        case 4: //Exit game
+        case 5: //Bestiary
             BestiaryMenu();
             break;
-        case 5:
+        case 6: //Exit
             run = false;
             break;
         }
@@ -68,10 +91,21 @@ void Menus::SettingsMenu(GameMap* map)
     bool run = true;
     int menuChoice = 0;
     Helper::ClearConsoleWindow();
-
+    Helper::ChangeTextColor(Color::CYAN);
     while (run)
     {
-        std::cout << "SETTINGS\n";
+        std::cout << R"(
+ ____    ____    ______  ______  ______   __  __  ____    ____       
+/\  _`\ /\  _`\ /\__  _\/\__  _\/\__  _\ /\ \/\ \/\  _`\ /\  _`\     
+\ \,\L\_\ \ \L\_\/_/\ \/\/_/\ \/\/_/\ \/ \ \ `\\ \ \ \L\_\ \,\L\_\   
+ \/_\__ \\ \  _\L  \ \ \   \ \ \   \ \ \  \ \ , ` \ \ \L_L\/_\__ \   
+   /\ \L\ \ \ \L\ \ \ \ \   \ \ \   \_\ \__\ \ \`\ \ \ \/, \/\ \L\ \ 
+   \ `\____\ \____/  \ \_\   \ \_\  /\_____\\ \_\ \_\ \____/\ `\____\
+    \/_____/\/___/    \/_/    \/_/  \/_____/ \/_/\/_/\/___/  \/_____/                                                                                                                                         
+)";
+        Helper::ResetText();
+        std::cout << "\nCurrent map size: " << map->X() << "x" << map->Y() << "\n";
+        std::cout << "Current enemy count: " << map->EnemyCount() << "\n";
         std::cout << "1. Map Size\n2. Enemy Count\n3. Exit\n\n Enter Menu Option: ";
         menuChoice = Helper::GetMenuChoice(1, 3);
 
@@ -85,6 +119,7 @@ void Menus::SettingsMenu(GameMap* map)
 
             Helper::ClearConsoleWindow();
             std::cout << "Map size changed.\n\n";
+            SaveLoad::SettingsSave(map);
 
             break;
         case 2: //Prompt user to change amount of enemies
@@ -93,6 +128,7 @@ void Menus::SettingsMenu(GameMap* map)
 
             Helper::ClearConsoleWindow();
             std::cout << "Enemy count changed.\n\n";
+            SaveLoad::SettingsSave(map);
             break;
         case 3: //Exit settings menu back to main
             Helper::ClearConsoleWindow();
@@ -105,14 +141,14 @@ void Menus::SettingsMenu(GameMap* map)
 void Menus::MapMenu(GameMap* map)
 {
     bool run = true;
-    map->MapPlayer(new Player(10, 5));
-    map->GenerateMap();
+
     map->PrintMap();
     std::string userInput;
 
     while (run)
     {
-        std::cout << "Input W A S or D to move up left down or right. Input E to exit to menu.\n";
+        Helper::PrintText(Color::YELLOW, TextType::UNDERLINE, "The red squares are enemies and the white square is you!",
+            "\nInput W A S or D to move up left down or right.\nInput E to save and exit to menu.\n");
 
         bool doInput = true;
         while (doInput)
@@ -172,7 +208,8 @@ void Menus::MapMenu(GameMap* map)
                 case 'e':
                 case 'E':
                     Helper::ClearConsoleWindow();
-                    map->GameReset();
+                    SaveLoad::MapSave(map);
+                    SaveLoad::PlayerSave(map->MapPlayer());
                     return;
                     break;
                 default:
@@ -196,16 +233,18 @@ void Menus::MapMenu(GameMap* map)
         }
 
 
-
+        //End game or move to next floor based on game status
         Helper::ClearConsoleWindow();
         if (map->MapPlayer()->Health() <= 0)
         {
             map->GameReset();
+            SaveLoad::WipeSaves();
             return;
         }
         
         if (map->Enemies().size() == 0)
         {
+            map->Floor(map->Floor() + 1);
             map->GenerateMap();
             PowerUpMenu(map);
         }
@@ -241,17 +280,21 @@ void Menus::CombatMenu(GameMap* map, int enemy)
     {
         //Print menu
         map->Enemies()[enemy]->PrintEnemy();
-        std::cout << "\n\n=======================================================\nA " << enemyName << " appears!\n\n";
+        std::cout << "\n\n=======================================================\n";
+        Helper::PrintText(Color::RED, "A ", enemyName, " appears!\n\n");
+
         if (combatChoice != 0 && enemyCombatChoice != 0)
         {
             Combat::PrintBattleText(combatChoice, enemyCombatChoice, enemyName, damage, map);
         }
-        std::cout << "\nEnemy health: " << map->Enemies()[enemy]->Health() << "\n";
-        std::cout << "Your health: " << map->MapPlayer()->Health() << "/" <<  map->MapPlayer()->MaxHealth() << "\n\n";
-
+        std::cout << "\n";
+        Helper::PrintText(Color::WHITE, BackgroundColor::RED, TextType::BOLD, "Enemy Health: ", map->Enemies()[enemy]->Health(), " ");
+        std::cout << "\n";
+        Helper::PrintText(Color::WHITE, BackgroundColor::BLUE, TextType::BOLD, "Your health: ", map->MapPlayer()->Health(), "/", map->MapPlayer()->MaxHealth(), " ");
+        std::cout << "\n\n";
         if (map->Enemies()[enemy]->Health() > 0 && map->MapPlayer()->Health() > 0)
         {
-            std::cout << "1. Lunge\t\t2. Defend\t\t3. Dash\n\nEnter action choice(1 2 or 3): ";
+            Helper::PrintText(Color::YELLOW, "1. Lunge\t\t2. Defend\t\t3. Dash\n\nEnter action choice(1 2 or 3): ");
         }
 
         //Win if enemy health is 0, lose if player health is 0
@@ -263,8 +306,8 @@ void Menus::CombatMenu(GameMap* map, int enemy)
         }
         else if (map->MapPlayer()->Health() <= 0)
         {
-            std::cout << "YOU LOSE!\n";
-            std::cout << "Press enter to return to main menu...";
+            Helper::PrintText(Color::RED, TextType::BOLD, "YOU LOSE");
+            std::cout << "\nPress enter to return to main menu...";
             Helper::PauseConsoleWindow();
             doCombat = false;
         }
@@ -297,9 +340,21 @@ void Menus::NextFloorScreen()
 void Menus::HelpMenu()
 {
     Helper::ClearConsoleWindow();
-    std::cout << "Instructions\n===============\nDefeat all enemies on the map to move to the next one!\n";
+    Helper::ChangeTextColor(Color::CYAN);
+    std::cout << R"(
+ ______   __  __  ____    ______  ____    __  __  ____    ______  ______   _____   __  __  ____       
+/\__  _\ /\ \/\ \/\  _`\ /\__  _\/\  _`\ /\ \/\ \/\  _`\ /\__  _\/\__  _\ /\  __`\/\ \/\ \/\  _`\     
+\/_/\ \/ \ \ `\\ \ \,\L\_\/_/\ \/\ \ \L\ \ \ \ \ \ \ \/\_\/_/\ \/\/_/\ \/ \ \ \/\ \ \ `\\ \ \,\L\_\   
+   \ \ \  \ \ , ` \/_\__ \  \ \ \ \ \ ,  /\ \ \ \ \ \ \/_/_ \ \ \   \ \ \  \ \ \ \ \ \ , ` \/_\__ \   
+    \_\ \__\ \ \`\ \/\ \L\ \ \ \ \ \ \ \\ \\ \ \_\ \ \ \L\ \ \ \ \   \_\ \__\ \ \_\ \ \ \`\ \/\ \L\ \ 
+    /\_____\\ \_\ \_\ `\____\ \ \_\ \ \_\ \_\ \_____\ \____/  \ \_\  /\_____\\ \_____\ \_\ \_\ `\____\
+    \/_____/ \/_/\/_/\/_____/  \/_/  \/_/\/ /\/_____/\/___/    \/_/  \/_____/ \/_____/\/_/\/_/\/_____/                                                                                                                                                                                                        
+)";
+    Helper::ChangeTextColor(Color::YELLOW);
+    std::cout << "\nDefeat all enemies on the map to move to the next one!\n";
     std::cout << "Enter W A S D to move around the map and reach enemies!\n";
-    std::cout << "Lunge beats block, block beats dash, and dash beats lunge!\nFor the best experience, expand the window vertically a bit.\n\n";
+    std::cout << "Lunge beats block, block beats dash, and dash beats lunge!\nEnemies get slightly stronger each floor...\nFor the best experience, expand the window vertically a bit.\n\n";
+    Helper::ResetText();
     std::cout << "Press enter to return to main menu...";
 
     Helper::PauseConsoleWindow();
@@ -339,7 +394,9 @@ void Menus::PowerUpMenu(GameMap* map)
 
     //Print options
     Helper::ClearConsoleWindow();
+    Helper::ChangeTextColor(Color::YELLOW);
     std::cout << "YOU BEAT ALL ENEMIES ON THE FLOOR!\nYOU HEALED 5 HEALTH!\nSELECT A POWERUP!\n\n";
+    Helper::ResetText();
     std::cout << "1. ";
     pow1->PrintPower();
     std::cout << "2. ";
@@ -373,6 +430,7 @@ void Menus::BestiaryMenu()
     while (run)
     {
         Helper::ClearConsoleWindow();
+        Helper::ChangeTextColor(Color::CYAN);
         std::cout << R"(
  ____                    __                                     
 /\  _`\                 /\ \__  __                              
@@ -384,9 +442,11 @@ void Menus::BestiaryMenu()
                                                           /\___/
                                                           \/__/ 
 )";
-
+        Helper::ResetText();
+        Helper::ChangeTextColor(Color::YELLOW);
         std::cout << "\n\nWelome to the Bestiary!\nHere you can see the stats of all enemies in the game, including the chance of them using their preferred attack pattern!\n";
         std::cout << "You can't see their odds of using other attacks though...that's secret!";
+        Helper::ResetText();
         std::cout << "\n\n1. Wizard Shroom\n2. Skeleton\n3. Hippie\n4. Unicorn\n5. Exit\n\n";
         std::cout << "Enter Menu Option: ";
         menuChoice = Helper::GetMenuChoice(1, 5);
@@ -397,7 +457,7 @@ void Menus::BestiaryMenu()
             enemy.SetEnemyType(EnemyType::WizardShroom);
             enemy.PrintEnemy();
             std::cout << "\n=======================================================\n";
-            std::cout << "WIZARD SHROOM\nHealth: 5\nAttack: 5\nAttack Preference: Lunge (60% chance)\n\n";
+            std::cout << "WIZARD SHROOM\nHealth: 1\nAttack: 5\nAttack Preference: Lunge (60% chance)\n\n";
             std::cout << "Press enter to return to bestiary menu...";
             Helper::PauseConsoleWindow();
             break;

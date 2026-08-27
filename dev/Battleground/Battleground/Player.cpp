@@ -1,5 +1,11 @@
 #include "Player.h"
 
+Player::Player(int health, int attack, int x, int y, int maxHealth, int healRate) :
+    Entity::Entity(health, attack, x, y), _maxHealth(maxHealth), _healRate(healRate)
+{
+
+}
+
 Player::Player(int health, int attack, int x, int y) :
 	Entity::Entity(health, attack, x, y)
 {

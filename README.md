@@ -77,4 +77,17 @@ The overall goal next week is to polish it and make it look nice. I hope to get 
 
 ### Week 4
 
-My final stand up...
+Overview – What did you accomplish this past week? 
+I touched up the rest of the game. Mostly visually. I added colors, displayed more stats, added floors and enemy scaling, and added saving and loading. 
+
+Project Wrap-Up – What did you finish, polish, or improve before submitting your final project? 
+As I said, I polished the visuals. I also changed the order of how some things generate in order to add the enemy Scaling 
+
+Challenges – What obstacles did you face, and how did you overcome them? 
+The week went surprisingly smooth. The save and load system did take a bit of trial and error and I had an issue for a while where saving and loading only worked while the program stayed open, not after the program closing. 
+
+Biggest Takeaway – Looking back, what was the most valuable thing you learned during this course? 
+My knowledge of pointers has greatly improved and I think I understand better ways to strucure code. 
+
+Future Development – If you continued this project after the course, what would you build or improve next? 
+I think I would add more powerups and flesh out the combat more by adding status effects. A couple ideas I scrapped are giving block a chance to stun, and adding treasures on floors for extra powerups. If I really had the time I'd like to have the map actually mean more by forcing the player to find the stairs to the next floor and adding walls.
