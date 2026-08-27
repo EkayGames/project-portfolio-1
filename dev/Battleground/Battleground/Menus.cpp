@@ -91,7 +91,7 @@ void Menus::SettingsMenu(GameMap* map)
     bool run = true;
     int menuChoice = 0;
     Helper::ClearConsoleWindow();
-
+    Helper::ChangeTextColor(Color::CYAN);
     while (run)
     {
         std::cout << R"(
@@ -103,7 +103,7 @@ void Menus::SettingsMenu(GameMap* map)
    \ `\____\ \____/  \ \_\   \ \_\  /\_____\\ \_\ \_\ \____/\ `\____\
     \/_____/\/___/    \/_/    \/_/  \/_____/ \/_/\/_/\/___/  \/_____/                                                                                                                                         
 )";
-
+        Helper::ResetText();
         std::cout << "\nCurrent map size: " << map->X() << "x" << map->Y() << "\n";
         std::cout << "Current enemy count: " << map->EnemyCount() << "\n";
         std::cout << "1. Map Size\n2. Enemy Count\n3. Exit\n\n Enter Menu Option: ";
@@ -233,7 +233,7 @@ void Menus::MapMenu(GameMap* map)
         }
 
 
-
+        //End game or move to next floor based on game status
         Helper::ClearConsoleWindow();
         if (map->MapPlayer()->Health() <= 0)
         {
@@ -244,6 +244,7 @@ void Menus::MapMenu(GameMap* map)
         
         if (map->Enemies().size() == 0)
         {
+            map->Floor(map->Floor() + 1);
             map->GenerateMap();
             PowerUpMenu(map);
         }
@@ -305,8 +306,8 @@ void Menus::CombatMenu(GameMap* map, int enemy)
         }
         else if (map->MapPlayer()->Health() <= 0)
         {
-            std::cout << "YOU LOSE!\n";
-            std::cout << "Press enter to return to main menu...";
+            Helper::PrintText(Color::RED, TextType::BOLD, "YOU LOSE");
+            std::cout << "\nPress enter to return to main menu...";
             Helper::PauseConsoleWindow();
             doCombat = false;
         }
@@ -352,9 +353,10 @@ void Menus::HelpMenu()
     Helper::ChangeTextColor(Color::YELLOW);
     std::cout << "\nDefeat all enemies on the map to move to the next one!\n";
     std::cout << "Enter W A S D to move around the map and reach enemies!\n";
-    std::cout << "Lunge beats block, block beats dash, and dash beats lunge!\nFor the best experience, expand the window vertically a bit.\n\n";
-    std::cout << "Press enter to return to main menu...";
+    std::cout << "Lunge beats block, block beats dash, and dash beats lunge!\nEnemies get slightly stronger each floor...\nFor the best experience, expand the window vertically a bit.\n\n";
     Helper::ResetText();
+    std::cout << "Press enter to return to main menu...";
+
     Helper::PauseConsoleWindow();
     Helper::ClearConsoleWindow();
 }
@@ -392,7 +394,9 @@ void Menus::PowerUpMenu(GameMap* map)
 
     //Print options
     Helper::ClearConsoleWindow();
+    Helper::ChangeTextColor(Color::YELLOW);
     std::cout << "YOU BEAT ALL ENEMIES ON THE FLOOR!\nYOU HEALED 5 HEALTH!\nSELECT A POWERUP!\n\n";
+    Helper::ResetText();
     std::cout << "1. ";
     pow1->PrintPower();
     std::cout << "2. ";
@@ -426,6 +430,7 @@ void Menus::BestiaryMenu()
     while (run)
     {
         Helper::ClearConsoleWindow();
+        Helper::ChangeTextColor(Color::CYAN);
         std::cout << R"(
  ____                    __                                     
 /\  _`\                 /\ \__  __                              
@@ -437,9 +442,11 @@ void Menus::BestiaryMenu()
                                                           /\___/
                                                           \/__/ 
 )";
-
+        Helper::ResetText();
+        Helper::ChangeTextColor(Color::YELLOW);
         std::cout << "\n\nWelome to the Bestiary!\nHere you can see the stats of all enemies in the game, including the chance of them using their preferred attack pattern!\n";
         std::cout << "You can't see their odds of using other attacks though...that's secret!";
+        Helper::ResetText();
         std::cout << "\n\n1. Wizard Shroom\n2. Skeleton\n3. Hippie\n4. Unicorn\n5. Exit\n\n";
         std::cout << "Enter Menu Option: ";
         menuChoice = Helper::GetMenuChoice(1, 5);
@@ -450,7 +457,7 @@ void Menus::BestiaryMenu()
             enemy.SetEnemyType(EnemyType::WizardShroom);
             enemy.PrintEnemy();
             std::cout << "\n=======================================================\n";
-            std::cout << "WIZARD SHROOM\nHealth: 5\nAttack: 5\nAttack Preference: Lunge (60% chance)\n\n";
+            std::cout << "WIZARD SHROOM\nHealth: 1\nAttack: 5\nAttack Preference: Lunge (60% chance)\n\n";
             std::cout << "Press enter to return to bestiary menu...";
             Helper::PauseConsoleWindow();
             break;

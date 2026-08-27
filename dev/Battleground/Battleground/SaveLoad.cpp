@@ -36,11 +36,12 @@ void SaveLoad::PlayerSave(Player* player)
 	}
 	else std::cout << "ERROR: FAILED TO OPEN FILE TO SAVE";
 }
-//map x, map y, current enemies, num enemies, num tiles, enemies, tiles,
+//map x, map y, floor, current enemies, num enemies, num tiles, enemies, tiles,
 void SaveLoad::MapSave(GameMap* map)
 {
 	int x = map->X();
 	int y = map->Y();
+	int floor = map->Floor();
 	int currentEnemies = map->Enemies().size();
 	int enemyCount = map->EnemyCount();
 	int numTiles = map->Tiles().size();
@@ -51,6 +52,7 @@ void SaveLoad::MapSave(GameMap* map)
 	{
 		outFile.write(reinterpret_cast<const char*>(&x), sizeof(x));
 		outFile.write(reinterpret_cast<const char*>(&y), sizeof(y));
+		outFile.write(reinterpret_cast<const char*>(&floor), sizeof(floor));
 		outFile.write(reinterpret_cast<const char*>(&currentEnemies), sizeof(currentEnemies));
 		outFile.write(reinterpret_cast<const char*>(&enemyCount), sizeof(enemyCount));
 		outFile.write(reinterpret_cast<const char*>(&numTiles), sizeof(numTiles));
@@ -153,6 +155,7 @@ void SaveLoad::MapLoad(GameMap* map)
 
 	int x = 0;
 	int y = 0;
+	int floor = 0;
 	int currentEnemies = 0;
 	int enemyCount = 0;
 	int tileCount = 0;
@@ -164,6 +167,7 @@ void SaveLoad::MapLoad(GameMap* map)
 	{
 		inFile.read(reinterpret_cast<char*>(&x), sizeof(x));
 		inFile.read(reinterpret_cast<char*>(&y), sizeof(y));
+		inFile.read(reinterpret_cast<char*>(&floor), sizeof(floor));
 		inFile.read(reinterpret_cast<char*>(&currentEnemies), sizeof(currentEnemies));
 		inFile.read(reinterpret_cast<char*>(&enemyCount), sizeof(enemyCount));
 		inFile.read(reinterpret_cast<char*>(&tileCount), sizeof(tileCount));
